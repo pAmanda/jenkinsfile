@@ -1,7 +1,7 @@
 node {
     stage('Example') {
         if (env.BRANCH_NAME != 'origin/hotfix') {
-            echo 'I ok  only execute on the master branch'
+           sh 'mvn clean install'
         } else {
             echo 'I execute elsewhere'
         }
