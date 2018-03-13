@@ -15,6 +15,7 @@ def call(body) {
                 }
                 stage ('Build') {
                     sh "echo 'building ${config.projectName} ...'"
+                    sh "echo 'variable = ${config.xpto} e ${config.version}'"
                     sh 'mvn clean install -Dmaven.test.skip=true -Dmaven.javadoc.skip=true'
                 }
                 stage ('Tests') {
