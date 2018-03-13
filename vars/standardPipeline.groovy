@@ -11,6 +11,7 @@ def call(body) {
 
             try {
                 stage ('Clone') {
+                    sh "echo 'Oieeee...'"
                     checkout scm
                 }
                 stage ('Build') {
