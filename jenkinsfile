@@ -1,9 +1,0 @@
-node {
-    stage('Example') {
-        if (env.BRANCH_NAME != 'origin/hotfix') {
-           sh 'mvn clean install'
-        } else {
-            echo 'I execute elsewhere'
-        }
-    }
-}
