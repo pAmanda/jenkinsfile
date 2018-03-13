@@ -11,7 +11,7 @@ def call(body) {
 
             try {
                 stage ('Clone') {
-                    sh "echo 'Oiee...'"
+                    sh "echo 'Oieeee...'"
                     sh 'printenv'
                     checkout scm
                 }
