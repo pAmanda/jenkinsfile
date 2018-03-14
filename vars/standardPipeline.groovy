@@ -1,4 +1,4 @@
-def call() {
+def call(any) {
         
         properties([
             durabilityHint('PERFORMANCE_OPTIMIZED')
