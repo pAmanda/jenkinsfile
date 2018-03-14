@@ -1,4 +1,3 @@
-def call() {
 
     properties([
         durabilityHint('PERFORMANCE_OPTIMIZED')
@@ -45,4 +44,4 @@ def call() {
             throw err
         }
     }
-}
+
