@@ -21,7 +21,7 @@ def call(body) {
                 }
                 stage ('Build') {
                    if (env.BRANCH_NAME == 'master') {
-                      echo 'I only execute on the master branch'
+                      echo 'I only execute on the master branch ************'
                    } else {
                     sh "echo 'building ${config.projectName} ...'"
                     sh "echo 'variabless = ${config.xpto} + ${config.version}'"
