@@ -1,5 +1,7 @@
 def call(body) {
 
+        delegate.setChangelog(true);
+        
         properties([
             durabilityHint('PERFORMANCE_OPTIMIZED')
         ])
@@ -8,7 +10,7 @@ def call(body) {
         body.resolveStrategy = Closure.DELEGATE_FIRST
         body.delegate = config
         body()
-
+      
         node {
             // Clean workspace before doing anything
             deleteDir()
