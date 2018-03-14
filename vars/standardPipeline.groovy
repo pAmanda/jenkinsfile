@@ -1,6 +1,4 @@
 def call(body) {
-
-        delegate.setChangelog(true);
         
         properties([
             durabilityHint('PERFORMANCE_OPTIMIZED')
