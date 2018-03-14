@@ -1,47 +1,48 @@
+def call(body) {
+        
+        properties([
+            durabilityHint('PERFORMANCE_OPTIMIZED')
+        ])
 
-    properties([
-        durabilityHint('PERFORMANCE_OPTIMIZED')
-    ])
+        def config = [:]
+        body.resolveStrategy = Closure.DELEGATE_FIRST
+        body.delegate = config
+        body()
+      
+        node {
+            // Clean workspace before doing anything
+            deleteDir()
 
-    node {
-        // Clean workspace before doing anything
-        deleteDir()
-
-        try {
-            stage('Checkout') {
-                git 'https://github.com/andersonlfeitosa/poc-jenkins-buildpipeline.git'
-            }
-            stage('Clean') {
-                sh "mvn clean"
-            }
-            stage('Build') {
-                sh "mvn install -DskipTests"
-            }
-            stage('Unit Tests') {
-                sh "mvn test"
-            }
-            stage('Archive') {
-                sh "mvn deploy -DskipTest"
-            }
-            stage('Sonar') {
-                withSonarQubeEnv('Sonar') {
-                sh "mvn sonar:sonar"
+            try {
+                stage ('Clone') {
+                    sh "echo 'Deu certo!!!!'"
+                    sh 'printenv'
+                    checkout scm
                 }
-            }
-            stage('Quality Gate') {
-                timeout(time: 1, unit: 'HOURS') {
-                    def qg = waitForQualityGate()
-                    if (qg.status != 'OK') {
-                        error "Pipeline aborted due to quality gate failure: ${qg.status}"
+                stage ('Build') {
+                   if (env.BRANCH_NAME == 'master') {
+                      echo 'I only execute on the master branch ****'
+                   } else {
+                    sh 'mvn clean install -Dmaven.test.skip=true -Dmaven.javadoc.skip=true'
+                   }
+                }
+                stage ('Tests') {
+                    parallel 'static': {
+                        sh "echo 'shell scripts to run static tests...'"
+                    },
+                    'unit': {
+                        sh "echo 'shell scripts to run unit tests...'"
+                    },
+                    'integration': {
+                        sh "echo 'shell scripts to run integration tests...'"
                     }
                 }
+                stage ('Deploy') {
+                    sh "echo 'deploying to server ...'"
+                }
+            } catch (err) {
+                currentBuild.result = 'FAILED'
+                throw err
             }
-            stage('Docker') {
-                //sh "mvn package docker:build docker:push"
-            }
-        } catch (err) {
-            currentBuild.result = 'FAILED'
-            throw err
         }
     }
-
