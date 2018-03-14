@@ -38,7 +38,7 @@ def call(body) {
                     }
                 }
                 stage ('Deploy') {
-                    sh "echo 'deploying to server ${config.serverDomain}...'"
+                    sh "echo 'deploying to server ...'"
                 }
             } catch (err) {
                 currentBuild.result = 'FAILED'
