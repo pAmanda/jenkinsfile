@@ -1,5 +1,9 @@
 def call(body) {
 
+        properties([
+            durabilityHint('PERFORMANCE_OPTIMIZED')
+        ])
+
         def config = [:]
         body.resolveStrategy = Closure.DELEGATE_FIRST
         body.delegate = config
