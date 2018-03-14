@@ -9,32 +9,37 @@ def call(any) {
             deleteDir()
 
             try {
-                stage ('Clone') {
-                    sh "echo 'Deu certo!!!!'"
-                    sh 'printenv'
-                    checkout scm
-                }
-                stage ('Build') {
-                   if (env.BRANCH_NAME == 'master') {
-                      echo 'I only execute on the master branch ****'
-                   } else {
-                    sh 'mvn clean install -Dmaven.test.skip=true -Dmaven.javadoc.skip=true'
-                   }
-                }
-                stage ('Tests') {
-                    parallel 'static': {
-                        sh "echo 'shell scripts to run static tests...'"
-                    },
-                    'unit': {
-                        sh "echo 'shell scripts to run unit tests...'"
-                    },
-                    'integration': {
-                        sh "echo 'shell scripts to run integration tests...'"
+                  stage('Checkout') {
+                     git 'https://github.com/andersonlfeitosa/poc-jenkins-buildpipeline.git'
+                  }
+                  stage('Clean') {
+                     sh "mvn clean"
+                  }
+                  stage('Build') {
+                     sh "mvn install -DskipTests"
+                  }
+                  stage('Unit Tests') {
+                     sh "mvn test"
+                  }
+                  stage('Archive') {
+                    sh "mvn deploy -DskipTest"
+                  }
+                  stage('Sonar') {
+                    withSonarQubeEnv('Sonar') {
+                      sh "mvn sonar:sonar"
                     }
-                }
-                stage ('Deploy') {
-                    sh "echo 'deploying to server ...'"
-                }
+                  }
+                  stage('Quality Gate') {
+                    timeout(time: 1, unit: 'HOURS') {
+                      def qg = waitForQualityGate()
+                      if (qg.status != 'OK') {
+                        error "Pipeline aborted due to quality gate failure: ${qg.status}"
+                      }
+                    }
+                  }
+                  stage('Docker') {
+                    //sh "mvn package docker:build docker:push"
+                  }
             } catch (err) {
                 currentBuild.result = 'FAILED'
                 throw err
