@@ -11,7 +11,7 @@ def call(body) {
         try {
             stage('Checkout') {
                 checkout scm
-                echo "branch == " env.BRANCH_NAME
+                echo "branch == " + env.BRANCH_NAME
             }
             stage('Build') {
                 echo "Initializing Build phase"
