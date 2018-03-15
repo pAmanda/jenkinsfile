@@ -1,5 +1,3 @@
-  
-
 def call(body) {
   
       properties([
