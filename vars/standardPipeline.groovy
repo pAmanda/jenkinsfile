@@ -1,8 +1,5 @@
 def call(body) {
     
-    
-    
-    
     properties([
         durabilityHint('PERFORMANCE_OPTIMIZED')
     ])
