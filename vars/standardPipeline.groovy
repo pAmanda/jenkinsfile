@@ -19,7 +19,7 @@ def call(body) {
             }
             stage('Build') {
                 echo "Initializing Build phase"
-                sh "mvn clean install -Dmaven.test.skip=true -Dmaven.javadoc.skip=true"
+                sh "mvn clean install -Dmaven.test.skip=true"
             }
             stage('Test') {
                 if(env.BRANCH_NAME != "**/feature/*") {
