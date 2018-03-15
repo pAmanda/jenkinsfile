@@ -5,7 +5,6 @@ def call(body) {
       ])
   
     node {
-
         // Clean workspace before doing anything
         deleteDir()
 
