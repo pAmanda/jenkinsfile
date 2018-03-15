@@ -7,11 +7,6 @@ def call(body) {
       ])
   
     node {
-      
-        parameters{
-            string(name: 'version', defaultValue: '0.0.1-SNAPSHOT', description: 'Número da versão que será fechada.')
-            string(name: 'next_version', defaultValue: '0.0.2-SNAPSHOT', description: 'Próxima versão de desenvolvimento.')
-        } 
 
         // Clean workspace before doing anything
         deleteDir()
@@ -55,6 +50,12 @@ def call(body) {
                 }
             }
             stage ('Release') {
+               
+                parameters{
+                    string(name: 'version', defaultValue: '0.0.1-SNAPSHOT', description: 'Número da versão que será fechada.')
+                    string(name: 'next_version', defaultValue: '0.0.2-SNAPSHOT', description: 'Próxima versão de desenvolvimento.')
+                } 
+        
                 if((env.BRANCH_NAME == "**/master" || en.BRANCH_NAME == "**/hotfix") && ${next_version} != ${version}) {
                     echo 'Initializing Release phase'
                     sh 'mvn -B -Dtag=${project.artifactId}-${project.version} release:prepare -DreleaseVersion=${version} -DdevelopmentVersion=${next_version}'
