@@ -1,7 +1,7 @@
 
-    properties([
-        durabilityHint('PERFORMANCE_OPTIMIZED')
-    ])
+//    properties([
+  //      durabilityHint('PERFORMANCE_OPTIMIZED')
+   // ])
 
     // parameters {
     //     string(name: 'version', defaultValue: '0.0.1-SNAPSHOT', description: 'Número da versão que será fechada.')
