@@ -4,12 +4,12 @@ def call(body) {
        durabilityHint('PERFORMANCE_OPTIMIZED')
     ])
 
-     parameters {
-         string(name: 'version', defaultValue: '0.0.1-SNAPSHOT', description: 'Número da versão que será fechada.')
-         string(name: 'next_version', defaultValue: '0.0.2-SNAPSHOT', description: 'Próxima versão de desenvolvimento.')
-     }
-
     node {
+      
+        parameters {
+            string(name: 'version', defaultValue: '0.0.1-SNAPSHOT', description: 'Número da versão que será fechada.')
+            string(name: 'next_version', defaultValue: '0.0.2-SNAPSHOT', description: 'Próxima versão de desenvolvimento.')
+        }
         // Clean workspace before doing anything
         deleteDir()
 
