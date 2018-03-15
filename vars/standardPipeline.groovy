@@ -1,4 +1,5 @@
 def call(body) {
+   
     properties([
         durabilityHint('PERFORMANCE_OPTIMIZED')
     ])
@@ -9,7 +10,8 @@ def call(body) {
 
         try {
             stage('Checkout') {
-                checkout scm            
+                checkout scm
+                echo "lsa / " + pwd()
             }
             stage('Build') {
                 echo "Initializing Build phase"
