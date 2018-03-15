@@ -30,9 +30,9 @@ def call(body) {
             stage ('Analyse') {
                 if(env.BRANCH_NAME != "**/feature/*") {
                     echo "Initializing Analyse phase"
-                    withSonarQubeEnv('Sonar') {
+                    //withSonarQubeEnv('Sonar') {
                         //sh "mvn sonar:sonar"
-                    }
+                    //}
                 }
             }
             stage('Quality Gate') {
