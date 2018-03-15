@@ -11,7 +11,7 @@ def call(body) {
         try {
             stage('Checkout') {
                 checkout scm
-                echo "Deu certo!!"
+                echo "Deu cerdssdato!!"
             }
             stage('Build') {
                 echo "Initializing Build phase"
