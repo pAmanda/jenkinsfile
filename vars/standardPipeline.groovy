@@ -31,7 +31,7 @@ def call(body) {
                 if(env.BRANCH_NAME != "**/feature/*") {
                     echo "Initializing Analyse phase"
                     withSonarQubeEnv('Sonar') {
-                        sh "mvn sonar:sonar"
+                        //sh "mvn sonar:sonar"
                     }
                 }
             }
