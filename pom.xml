@@ -2,5 +2,5 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>jenkinsfile</groupId>
   <artifactId>jenkinsfile</artifactId>
-  <version>0.0.56-SNAPSHOT</version>
+  <version>0.0.5-SNAPSHOT</version>
 </project>
