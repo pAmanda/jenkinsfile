@@ -24,7 +24,7 @@ def call(body) {
                 }
             }
             stage ('Analyse') {
-                if(env.BRANCH_NAME != "**/feature/*") {
+                if(env.BRANCH_NAME == "**/master" || en.BRANCH_NAME == "**/hotfix") {
                     echo "Initializing Analyse phase"
                     //withSonarQubeEnv('Sonar') {
                         //sh "mvn sonar:sonar"
