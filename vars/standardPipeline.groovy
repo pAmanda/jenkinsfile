@@ -49,10 +49,10 @@ def call(body) {
                 } 
             }
             stage ('Release') {       
-                if((env.BRANCH_NAME == "**/master" || en.BRANCH_NAME == "**/hotfix") && ${next_version} != ${version}) {
+                //if((env.BRANCH_NAME == "**/master" || en.BRANCH_NAME == "**/hotfix") && ${next_version} != ${version}) {
                     echo 'Initializing Release phase'
                     sh 'mvn -B release:prepare -DreleaseVersion=${VERSION} -DdevelopmentVersion=${NEXT_VERSION}'
-                } 
+                //} 
             }
             stage('Docker') {
                 //sh "mvn package docker:build docker:push"
