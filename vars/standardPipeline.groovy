@@ -18,7 +18,7 @@ def call(body) {
             }
             stage('Test') {
                 if(env.BRANCH_NAME != "**/feature/*") {
-                    echo "Initializing test phase"
+                    echo "Initializing test phase..."
                     sh "mvn test"
                 }
             }
