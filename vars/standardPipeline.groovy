@@ -10,7 +10,6 @@ def call(body) {
 
         try {
             stage('Checkout') {
-                echo "PARAMETERS = ${VERSION} e ${NEXT_VERSION}"
                 checkout scm
             }
             stage('Build') {
