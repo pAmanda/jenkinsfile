@@ -46,7 +46,8 @@ def call(body) {
                 if(env.BRANCH_NAME == "**/master") {
                     echo 'Initializing Archive phase'
                     sh 'mvn deploy -Dmaven.test.skip=true'
-                } else if(env.BRANCH_NAME == "**/hotfix"){
+                } 
+                if(env.BRANCH_NAME == "**/hotfix"){
                     echo 'Initializing Archive phase'
                     sh 'mvn deploy -Dmaven.test.skip=true'
                 }
