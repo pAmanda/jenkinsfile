@@ -10,6 +10,7 @@ def call(body) {
 
         try {
             stage('Checkout') {
+                echo "parameters = ${VERSION} e ${NEXT_VERSION}"
                 checkout scm
             }
             stage('Build') {
@@ -47,13 +48,24 @@ def call(body) {
                     sh 'mvn deploy -Dmaven.test.skip=true'
                 } 
             }
-            stage ('Release') {       
-                //if((env.BRANCH_NAME == "**/master" || en.BRANCH_NAME == "**/hotfix") && ${next_version} != ${version}) {
-                    echo 'Initializing Release phase'
-                    sh 'git checkout master'
-                    sh 'mvn -B release:prepare -DreleaseVersion=${VERSION} -DdevelopmentVersion=${NEXT_VERSION}'
-                //} 
+            stage ('Release') {   
+                switch(env.BRANCH_NAME){
+                    case "**/master":
+                        if(${VERSION} != ${NEXT_VERSION}){
+                            echo 'Initializing Release phase'
+                            sh 'git checkout master'
+                            sh 'mvn -B release:prepare -DreleaseVersion=${VERSION} -DdevelopmentVersion=${NEXT_VERSION}'
+                        }
+                        break
+                    case "**/hotfix":
+                        if(${VERSION} != ${NEXT_VERSION}){
+                            echo 'Initializing Release phase'
+                            sh 'git checkout hotfix'
+                            sh 'mvn -B release:prepare -DreleaseVersion=${VERSION} -DdevelopmentVersion=${NEXT_VERSION}'
+                        }           
+                }
             }
+                
             stage('Docker') {
                 //sh "mvn package docker:build docker:push"
             }
