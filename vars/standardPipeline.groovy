@@ -43,10 +43,10 @@ def call(body) {
                // }
             }
             stage('Archive') {
-                //if(env.BRANCH_NAME == "**/master" || en.BRANCH_NAME == "**/hotfix") {
+                if(env.BRANCH_NAME in ["**/master", "**/hotfix"] {
                     echo 'Initializing Archive phase'
                     sh 'mvn deploy -Dmaven.test.skip=true'
-                //}
+                }
             }
             stage ('Release') {       
                 if((env.BRANCH_NAME == "**/master" || en.BRANCH_NAME == "**/hotfix") && ${next_version} != ${version}) {
