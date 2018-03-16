@@ -51,6 +51,7 @@ def call(body) {
             stage ('Release') {       
                 //if((env.BRANCH_NAME == "**/master" || en.BRANCH_NAME == "**/hotfix") && ${next_version} != ${version}) {
                     echo 'Initializing Release phase'
+                    sh 'git checkout master'
                     sh 'mvn -B release:prepare -DreleaseVersion=${VERSION} -DdevelopmentVersion=${NEXT_VERSION}'
                 //} 
             }
