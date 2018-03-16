@@ -15,7 +15,7 @@ def call(body) {
 
         try {
             stage('Checkout') {
-                echo "PARAMETERS = ${VERSION} e ${NEXT_VERSION}"
+                echo "PARAMETERS = ${VERSION} e ${NEXT_VERSION} E ${project.version} E ${project.artifactId}"
                 checkout scm
             }
             stage('Build') {
@@ -55,7 +55,7 @@ def call(body) {
             stage ('Release') {       
                 if((env.BRANCH_NAME == "**/master" || en.BRANCH_NAME == "**/hotfix") && ${next_version} != ${version}) {
                     echo 'Initializing Release phase'
-                    sh 'mvn -B -Dtag=${project.artifactId}-${project.version} release:prepare -DreleaseVersion=${version} -DdevelopmentVersion=${next_version}'
+                    sh 'mvn -B -Dtag=${project.artifactId}-${project.version} release:prepare -DreleaseVersion=${VERSION} -DdevelopmentVersion=${NEXT_VERSION}'
                 } 
             }
             stage('Docker') {
