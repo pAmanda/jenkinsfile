@@ -43,7 +43,7 @@ def call(body) {
                // }
             }
             stage('Archive') {
-                if(env.BRANCH_NAME == "**/master") {
+                if(env.BRANCH_NAME != "**/feature/*") {
                     echo 'Initializing Archive phase'
                     sh 'mvn deploy -Dmaven.test.skip=true'
                 } 
