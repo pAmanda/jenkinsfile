@@ -15,6 +15,7 @@ def call(body) {
 
         try {
             stage('Checkout') {
+                echo "PARAMETERS = ${VERSION} e ${NEXT_VERSION}"
                 checkout scm
             }
             stage('Build') {
@@ -23,7 +24,7 @@ def call(body) {
             }
             stage('Test') {
                 if(env.BRANCH_NAME != "**/feature/*") {
-                    echo "Initializing test phase..."
+                    echo "Initializing test phase"
                     sh "mvn test"
                 }
             }
