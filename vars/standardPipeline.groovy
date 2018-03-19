@@ -27,7 +27,7 @@ def call(body) {
                 }
             }
             stage ('Analyse') {
-                if(BRANCH_NAME != "origin/feature/*") {
+                if(!BRANCH_NAME.contains("feature")) {
                     echo "Initializing Analyse phase"
                     //withSonarQubeEnv('Sonar') {
                         //sh "mvn sonar:sonar"
@@ -35,7 +35,7 @@ def call(body) {
                 }
             }
             stage('Quality Gate') {
-                 if(BRANCH_NAME != "origin/feature/*") {
+                 if(!BRANCH_NAME.contains("feature")) {
                     echo "Initializing Quality Gate phase"
                     //timeout(time: 1, unit: 'HOURS') {
                       //  def qg = waitForQualityGate()
@@ -46,7 +46,7 @@ def call(body) {
                 }
             }
             stage('Archive') {
-                if(BRANCH_NAME == "origin/master" || BRANCH_NAME == "origin/hotfix") {
+                if(BRANCH_NAME.contains("master") || BRANCH_NAME.contains("hotfix")) {
                     echo 'Initializing Archive phase'
                     sh 'mvn deploy -Dmaven.test.skip=true'
                 }
