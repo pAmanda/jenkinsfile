@@ -6,18 +6,21 @@ def call(body) {
     
     node {
         // Clean workspace before doing anything
+        
         deleteDir()
         def VARS = checkout scm
         def BRANCH_NAME = VARS.GIT_BRANCH
         def COMMIT_MESSAGE = sh (script: 'git log -1 --pretty=%B',returnStdout: true).trim()
+        def JOB = Jenkins.instance.getItemByFullName(env.JOB_NAME)
 
         try {
             stage('Checkout') {
                 if(COMMIT_MESSAGE.contains("maven-release-plugin")) {
-                    System.exit(0)
+                    build.doStop();
                 }
                 checkout scm
                 echo "COMMIT_MESSAGE =  " + COMMIT_MESSAGE
+                echo "job = " + JOB
                 echo "parameters = " + VERSION + " e " + NEXT_VERSION
                 echo "branch = " + BRANCH_NAME
             }
