@@ -11,16 +11,14 @@ def call(body) {
         def VARS = checkout scm
         def BRANCH_NAME = VARS.GIT_BRANCH
         def COMMIT_MESSAGE = sh (script: 'git log -1 --pretty=%B',returnStdout: true).trim()
-        //def JOB = Jenkins.instance
 
         try {
             stage('Checkout') {
                 if(COMMIT_MESSAGE.contains("[maven-release-plugin]")) {
-                   // build.doStop();
+                   sh "exit ./build.sh" 
                 }
                 checkout scm
                 echo "COMMIT_MESSAGE =  " + COMMIT_MESSAGE
-               // echo "job = " + JOB
                 echo "parameters = " + VERSION + " e " + NEXT_VERSION
                 echo "branch = " + BRANCH_NAME
             }
