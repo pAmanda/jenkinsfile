@@ -1,9 +1,5 @@
 def call(body) {
 
-    def getGitBranchName() {
-       return scm.branches[0].name
-    }
-    
     def scmVars = checkout scm
     def branchName = scmVars.GIT_BRANCH
 
