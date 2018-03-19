@@ -9,15 +9,12 @@ def call(body) {
         deleteDir()
         def VARS = checkout scm
         def BRANCH_NAME = VARS.GIT_BRANCH
+        def COMMIT_MESSAGE = sh (script: 'git log -1 --pretty=%B',returnStdout: true).trim()
 
         try {
             stage('Checkout') {
                 checkout scm
-                GIT_COMMIT_EMAIL = sh (
-                    script: 'git log -1 --pretty=%B',
-                    returnStdout: true
-                    ).trim()
-                echo "Git committer email: ${GIT_COMMIT_EMAIL}"
+                echo "Git committer email: " + COMMIT_MESSAGE
                 echo "parameters = " + VERSION + " e " + NEXT_VERSION
                 echo "branch = " + BRANCH_NAME
             }
