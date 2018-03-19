@@ -15,7 +15,7 @@ def call(body) {
 
         try {
             stage('Checkout') {
-                if(COMMIT_MESSAGE.contains("maven-release-plugin")) {
+                if(COMMIT_MESSAGE.contains("[maven-release-plugin]")) {
                    // build.doStop();
                 }
                 checkout scm
