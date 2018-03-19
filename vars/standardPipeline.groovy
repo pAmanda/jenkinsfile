@@ -12,9 +12,9 @@ def call(body) {
 
         try {
             stage('Checkout') {
+                checkout scm
                 echo "parameters = ${VERSION} e ${NEXT_VERSION}"
                 echo "branch = " + BRANCH_NAME
-                sh 'printenv'
             }
             stage('Build') {
                 echo "Initializing Build phase"
