@@ -11,8 +11,9 @@ def call(body) {
         try {
             stage('Checkout') {
                 echo "parameters = ${VERSION} e ${NEXT_VERSION}"
-                
-                printenv
+                echo ${env.BRANCH_NAME}
+                 echo BRANCH_NAME
+                sh 'printenv'
                 checkout scm
             }
             stage('Build') {
