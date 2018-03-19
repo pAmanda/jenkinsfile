@@ -46,13 +46,10 @@ def call(body) {
                // }
             }
             stage('Archive') {
-                if(BRANCH_NAME == "origin/master") {
+                if(BRANCH_NAME == "origin/master" || BRANCH_NAME == "origin/hotfix") {
                     echo 'Initializing Archive phase'
                     sh 'mvn deploy -Dmaven.test.skip=true'
-                } else if(BRANCH_NAME == "origin/hotfix") {
-                    echo 'Initializing Archive phase'
-                    sh 'mvn deploy -Dmaven.test.skip=true'
-                }    
+                }
             }
             stage ('Release') {
                 if(VERSION != NEXT_VERSION) {
@@ -71,7 +68,7 @@ def call(body) {
                 
             stage('Docker') {
                 if(VERSION != NEXT_VERSION) {
-                    if(BRANCH_NAME.contains("origin/master") && BRANCH_NAME.contains("origin/hotfix")) {
+                    if(BRANCH_NAME.contains("origin/master") || BRANCH_NAME.contains("origin/hotfix")) {
                          echo 'Initializing Docker phase'
                         //sh "mvn package docker:build docker:push"
                     }
