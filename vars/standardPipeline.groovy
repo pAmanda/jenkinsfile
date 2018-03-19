@@ -21,7 +21,7 @@ def call(body) {
                 sh "mvn clean install -Dmaven.test.skip=true -Dmaven.javadoc.skip=true"
             }
             stage('Test') {
-                if(BRANCH_NAME != "origin/feature/*") {
+                if(!BRANCH_NAME.contains("feature") {
                     echo "Initializing test phase"
                     sh "mvn test"
                 }
