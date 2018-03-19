@@ -11,7 +11,7 @@ def call(body) {
         try {
             stage('Checkout') {
                 echo "parameters = ${VERSION} e ${NEXT_VERSION}"
-                echo "branch = " + GIT_BRANCH
+                echo "branch = " + env.BRANCH_NAME
                 checkout scm
             }
             stage('Build') {
