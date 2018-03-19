@@ -21,13 +21,13 @@ def call(body) {
                 sh "mvn clean install -Dmaven.test.skip=true -Dmaven.javadoc.skip=true"
             }
             stage('Test') {
-                if(BRANCH_NAME != "**/feature/*") {
+                if(BRANCH_NAME != "origin/feature/*") {
                     echo "Initializing test phase"
                     sh "mvn test"
                 }
             }
             stage ('Analyse') {
-                if(BRANCH_NAME != "**/feature/*") {
+                if(BRANCH_NAME != "origin/feature/*") {
                     echo "Initializing Analyse phase"
                     //withSonarQubeEnv('Sonar') {
                         //sh "mvn sonar:sonar"
@@ -46,24 +46,24 @@ def call(body) {
                // }
             }
             stage('Archive') {
-                if(BRANCH_NAME == "**/master") {
+                if(BRANCH_NAME == "origin/master") {
                     echo 'Initializing Archive phase'
                     sh 'mvn deploy -Dmaven.test.skip=true'
-                } else if(env.BRANCH_NAME == "**/hotfix") {
+                } else if(env.BRANCH_NAME == "origin/hotfix") {
                     echo 'Initializing Archive phase'
                     sh 'mvn deploy -Dmaven.test.skip=true'
                 }    
             }
             stage ('Release') {   
                 switch(BRANCH_NAME){
-                    case "**/master":
+                    case "origin/master":
                         if(${VERSION} != ${NEXT_VERSION}){
                             echo 'Initializing Release phase'
                             sh 'git checkout master'
                             sh 'mvn -B release:prepare -DreleaseVersion=${VERSION} -DdevelopmentVersion=${NEXT_VERSION}'
                         }
                         break
-                    case "**/hotfix":
+                    case "origin/hotfix":
                         if(${VERSION} != ${NEXT_VERSION}){
                             echo 'Initializing Release phase'
                             sh 'git checkout hotfix'
