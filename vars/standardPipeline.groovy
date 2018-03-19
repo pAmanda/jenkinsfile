@@ -24,7 +24,7 @@ def call(body) {
                 }
             }
             stage ('Analyse') {
-                if(env.BRANCH_NAME == "**/master" || en.BRANCH_NAME == "**/hotfix") {
+                if(env.BRANCH_NAME != "**/feature/*") {
                     echo "Initializing Analyse phase"
                     //withSonarQubeEnv('Sonar') {
                         //sh "mvn sonar:sonar"
@@ -43,10 +43,13 @@ def call(body) {
                // }
             }
             stage('Archive') {
-                if(env.BRANCH_NAME != "**/feature/*") {
+                if(env.BRANCH_NAME == "**/master") {
                     echo 'Initializing Archive phase'
                     sh 'mvn deploy -Dmaven.test.skip=true'
-                } 
+                } else if(env.BRANCH_NAME == "**/hotfix") {
+                    echo 'Initializing Archive phase'
+                    sh 'mvn deploy -Dmaven.test.skip=true'
+                }    
             }
             stage ('Release') {   
                 switch(env.BRANCH_NAME){
