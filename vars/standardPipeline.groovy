@@ -14,11 +14,10 @@ def call(body) {
             stage('Checkout') {
                 checkout scm
                 GIT_COMMIT_EMAIL = sh (
-                    script: 'git log -1',
+                    script: 'git log -1 --pretty=%B',
                     returnStdout: true
                     ).trim()
                 echo "Git committer email: ${GIT_COMMIT_EMAIL}"
-                echo "Result = " + VARS.COMMIT_MESSAGE
                 echo "parameters = " + VERSION + " e " + NEXT_VERSION
                 echo "branch = " + BRANCH_NAME
             }
