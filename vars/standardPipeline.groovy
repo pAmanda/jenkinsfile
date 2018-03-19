@@ -49,26 +49,24 @@ def call(body) {
                 if(BRANCH_NAME == "origin/master") {
                     echo 'Initializing Archive phase'
                     sh 'mvn deploy -Dmaven.test.skip=true'
-                } else if(env.BRANCH_NAME == "origin/hotfix") {
+                } else if(BRANCH_NAME == "origin/hotfix") {
                     echo 'Initializing Archive phase'
                     sh 'mvn deploy -Dmaven.test.skip=true'
                 }    
             }
-            stage ('Release') {   
-                switch(BRANCH_NAME){
-                    case "origin/master":
-                        if(${VERSION} != ${NEXT_VERSION}){
+            stage ('Release') {
+                if(${VERSION} != ${NEXT_VERSION}){
+                    switch(BRANCH_NAME){
+                        case "origin/master":
                             echo 'Initializing Release phase'
                             sh 'git checkout master'
                             sh 'mvn -B release:prepare -DreleaseVersion=${VERSION} -DdevelopmentVersion=${NEXT_VERSION}'
-                        }
-                        break
-                    case "origin/hotfix":
-                        if(${VERSION} != ${NEXT_VERSION}){
+                            break
+                        case "origin/hotfix":
                             echo 'Initializing Release phase'
                             sh 'git checkout hotfix'
                             sh 'mvn -B release:prepare -DreleaseVersion=${VERSION} -DdevelopmentVersion=${NEXT_VERSION}'
-                        }           
+                    }
                 }
             }
                 
