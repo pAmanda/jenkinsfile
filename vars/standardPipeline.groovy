@@ -56,14 +56,13 @@ def call(body) {
             }
             stage ('Release') {
                 if(${VERSION} != ${NEXT_VERSION}){
+                    echo 'Initializing Release phase'
                     switch(BRANCH_NAME){
                         case "origin/master":
-                            echo 'Initializing Release phase'
                             sh 'git checkout master'
                             sh 'mvn -B release:prepare -DreleaseVersion=${VERSION} -DdevelopmentVersion=${NEXT_VERSION}'
                             break
                         case "origin/hotfix":
-                            echo 'Initializing Release phase'
                             sh 'git checkout hotfix'
                             sh 'mvn -B release:prepare -DreleaseVersion=${VERSION} -DdevelopmentVersion=${NEXT_VERSION}'
                     }
