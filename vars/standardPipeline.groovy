@@ -14,6 +14,8 @@ def call(body) {
             stage('Checkout') {
                 checkout scm
                 sh "printenv"
+                result = sh (script: "git log -1)
+                echo "Result = " + result
                 echo "parameters = " + VERSION + " e " + NEXT_VERSION
                 echo "branch = " + BRANCH_NAME
             }
