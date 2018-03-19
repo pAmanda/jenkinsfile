@@ -55,7 +55,7 @@ def call(body) {
                 }    
             }
             stage ('Release') {
-                if(VERSION != NEXT_VERSION){
+                if(VERSION != NEXT_VERSION) {
                     echo 'Initializing Release phase'
                     switch(BRANCH_NAME){
                         case "origin/master":
@@ -70,7 +70,12 @@ def call(body) {
             }
                 
             stage('Docker') {
-                //sh "mvn package docker:build docker:push"
+                if(VERSION != NEXT_VERSION) {
+                    if(BRANCH_NAME.contains("origin/master") && BRANCH_NAME.contains("origin/hotfix")) {
+                         echo 'Initializing Docker phase'
+                        //sh "mvn package docker:build docker:push"
+                    }
+                }
             }
         } catch (err) {
             currentBuild.result = 'FAILED'
