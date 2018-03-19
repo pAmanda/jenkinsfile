@@ -13,7 +13,7 @@ def call(body) {
         try {
             stage('Checkout') {
                 checkout scm
-                echo "parameters = ${VERSION} e ${NEXT_VERSION}"
+                echo "parameters = " + VERSION + " e " + NEXT_VERSION
                 echo "branch = " + BRANCH_NAME
             }
             stage('Build') {
