@@ -13,8 +13,11 @@ def call(body) {
 
         try {
             stage('Checkout') {
+                if(COMMIT_MESSAGE.contains("maven-release-plugin")) {
+                    System.exit(0)
+                }
                 checkout scm
-                echo "Git committer email: " + COMMIT_MESSAGE
+                echo "COMMIT_MESSAGE =  " + COMMIT_MESSAGE
                 echo "parameters = " + VERSION + " e " + NEXT_VERSION
                 echo "branch = " + BRANCH_NAME
             }
