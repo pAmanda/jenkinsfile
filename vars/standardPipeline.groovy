@@ -1,8 +1,5 @@
 def call(body) {
 
-    def scmVars = checkout scm
-    def branchName = scmVars.GIT_BRANCH
-
     properties([
         durabilityHint('PERFORMANCE_OPTIMIZED')
     ])
@@ -13,10 +10,10 @@ def call(body) {
 
         try {
             stage('Checkout') {
-                echo "parameters = ${VERSION} e ${NEXT_VERSION}"
-                echo "branhc = " + branchName
-                sh 'printenv'
                 checkout scm
+                echo "parameters = ${VERSION} e ${NEXT_VERSION}"
+                echo "branhc = " + scm.GIT_BRANCH
+                sh 'printenv'
             }
             stage('Build') {
                 echo "Initializing Build phase"
