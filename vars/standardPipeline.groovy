@@ -13,7 +13,11 @@ def call(body) {
         try {
             stage('Checkout') {
                 checkout scm
-                sh "printenv"
+                GIT_COMMIT_EMAIL = sh (
+                    script: 'git log -1',
+                    returnStdout: true
+                    ).trim()
+                echo "Git committer email: ${GIT_COMMIT_EMAIL}"
                 echo "Result = " + VARS.COMMIT_MESSAGE
                 echo "parameters = " + VERSION + " e " + NEXT_VERSION
                 echo "branch = " + BRANCH_NAME
