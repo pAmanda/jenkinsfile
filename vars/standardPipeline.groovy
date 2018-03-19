@@ -10,9 +10,9 @@ def call(body) {
 
         try {
             stage('Checkout') {
-                checkout scm
+                def vars = checkout scm
                 echo "parameters = ${VERSION} e ${NEXT_VERSION}"
-                echo "branhc = " + scm.GIT_BRANCH
+                echo "branhc = " + vars.GIT_BRANCH
                 sh 'printenv'
             }
             stage('Build') {
