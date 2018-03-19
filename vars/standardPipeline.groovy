@@ -3,6 +3,9 @@ def call(body) {
     def getGitBranchName() {
        return scm.branches[0].name
     }
+    
+    def scmVars = checkout scm
+    def branchName = scmVars.GIT_BRANCH
 
     properties([
         durabilityHint('PERFORMANCE_OPTIMIZED')
@@ -15,7 +18,7 @@ def call(body) {
         try {
             stage('Checkout') {
                 echo "parameters = ${VERSION} e ${NEXT_VERSION}"
-                echo getGitBranchName()
+                echo "branhc = " + branchName
                 sh 'printenv'
                 checkout scm
             }
