@@ -15,6 +15,7 @@ def call(body) {
         try {
             stage('Checkout') {
                 if(COMMIT_MESSAGE.contains("[maven-release-plugin]")) {
+                   currentBuild.result = 'FAILURE'
                    sh "exit ./build.sh" 
                 }
                 checkout scm
