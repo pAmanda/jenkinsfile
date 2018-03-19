@@ -21,13 +21,13 @@ def call(body) {
                 sh "mvn clean install -Dmaven.test.skip=true -Dmaven.javadoc.skip=true"
             }
             stage('Test') {
-                if(env.BRANCH_NAME != "**/feature/*") {
+                if(BRANCH_NAME != "**/feature/*") {
                     echo "Initializing test phase"
                     sh "mvn test"
                 }
             }
             stage ('Analyse') {
-                if(env.BRANCH_NAME != "**/feature/*") {
+                if(BRANCH_NAME != "**/feature/*") {
                     echo "Initializing Analyse phase"
                     //withSonarQubeEnv('Sonar') {
                         //sh "mvn sonar:sonar"
@@ -46,7 +46,7 @@ def call(body) {
                // }
             }
             stage('Archive') {
-                if(env.BRANCH_NAME == "**/master") {
+                if(BRANCH_NAME == "**/master") {
                     echo 'Initializing Archive phase'
                     sh 'mvn deploy -Dmaven.test.skip=true'
                 } else if(env.BRANCH_NAME == "**/hotfix") {
@@ -55,7 +55,7 @@ def call(body) {
                 }    
             }
             stage ('Release') {   
-                switch(env.BRANCH_NAME){
+                switch(BRANCH_NAME){
                     case "**/master":
                         if(${VERSION} != ${NEXT_VERSION}){
                             echo 'Initializing Release phase'
