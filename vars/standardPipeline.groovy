@@ -13,6 +13,7 @@ def call(body) {
         try {
             stage('Checkout') {
                 checkout scm
+                sh "printenv"
                 echo "parameters = " + VERSION + " e " + NEXT_VERSION
                 echo "branch = " + BRANCH_NAME
             }
