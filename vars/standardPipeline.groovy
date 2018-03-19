@@ -55,7 +55,7 @@ def call(body) {
                 }    
             }
             stage ('Release') {
-                if(${VERSION} != ${NEXT_VERSION}){
+                if(VERSION != NEXT_VERSION){
                     echo 'Initializing Release phase'
                     switch(BRANCH_NAME){
                         case "origin/master":
