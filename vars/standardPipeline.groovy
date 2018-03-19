@@ -1,5 +1,10 @@
 def call(body) {
 
+    def config = [:]
+        body.resolveStrategy = Closure.DELEGATE_FIRST
+        body.delegate = config
+        body()
+
     properties([
         durabilityHint('PERFORMANCE_OPTIMIZED')
     ])
@@ -11,7 +16,7 @@ def call(body) {
         try {
             stage('Checkout') {
                 echo "parameters = ${VERSION} e ${NEXT_VERSION}"
-                echo "BRANCH = " + env.GIT_BRANCH
+                echo "BRANCH = " config.branch
                 sh 'printenv'
                 checkout scm
             }
