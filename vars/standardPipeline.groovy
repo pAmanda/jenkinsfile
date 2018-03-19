@@ -7,12 +7,13 @@ def call(body) {
     node {
         // Clean workspace before doing anything
         deleteDir()
-        def vars = checkout scm
+        def VARS = checkout scm
+        def BRANCH_NAME = VARS.GIT_BRANCH
 
         try {
             stage('Checkout') {
                 echo "parameters = ${VERSION} e ${NEXT_VERSION}"
-                echo "branhc = " + vars.GIT_BRANCH
+                echo "branch = " + BRANCH_NAME
                 sh 'printenv'
             }
             stage('Build') {
