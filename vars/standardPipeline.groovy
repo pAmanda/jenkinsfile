@@ -21,13 +21,13 @@ def call(body) {
                 sh "mvn clean install -Dmaven.test.skip=true -Dmaven.javadoc.skip=true"
             }
             stage('Test') {
-                if(BRANCH_NAME != "**/feature/*") {
+                if(BRANCH_NAME != "origin/feature/*") {
                     echo "Initializing test phase"
                     sh "mvn test"
                 }
             }
             stage ('Analyse') {
-                if(BRANCH_NAME != "**/feature/*") {
+                if(BRANCH_NAME != "origin/feature/*") {
                     echo "Initializing Analyse phase"
                     //withSonarQubeEnv('Sonar') {
                         //sh "mvn sonar:sonar"
@@ -35,7 +35,7 @@ def call(body) {
                 }
             }
             stage('Quality Gate') {
-                 if(BRANCH_NAME != "**/feature/*") {
+                 if(BRANCH_NAME != "origin/feature/*") {
                     echo "Initializing Quality Gate phase"
                     //timeout(time: 1, unit: 'HOURS') {
                       //  def qg = waitForQualityGate()
@@ -54,12 +54,12 @@ def call(body) {
             stage ('Release') {
                 if(VERSION != NEXT_VERSION) {
                     switch(BRANCH_NAME){
-                        case "**/master":
+                        case "origin/master":
                             echo 'Initializing Release phase'
                             sh 'git checkout master'
                             sh 'mvn -B release:prepare -DreleaseVersion=${VERSION} -DdevelopmentVersion=${NEXT_VERSION}'
                             break
-                        case "**/hotfix":
+                        case "origin/hotfix":
                             echo 'Initializing Release phase'
                             sh 'git checkout hotfix'
                             sh 'mvn -B release:prepare -DreleaseVersion=${VERSION} -DdevelopmentVersion=${NEXT_VERSION}'
@@ -69,7 +69,7 @@ def call(body) {
                 
             stage('Docker') {
                 if(VERSION != NEXT_VERSION) {
-                    if(BRANCH_NAME.contains("**/master") || BRANCH_NAME.contains("**/hotfix")) {
+                    if(BRANCH_NAME.contains("master") || BRANCH_NAME.contains("hotfix")) {
                          echo 'Initializing Docker phase'
                         //sh "mvn package docker:build docker:push"
                     }
