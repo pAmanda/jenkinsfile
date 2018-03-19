@@ -46,7 +46,7 @@ def call(body) {
                 }
             }
             stage('Archive') {
-                if(BRANCH_NAME == "**/master" || BRANCH_NAME == "**/hotfix") {
+                if(BRANCH_NAME == "origin/master" || BRANCH_NAME == "origin/hotfix") {
                     echo 'Initializing Archive phase'
                     sh 'mvn deploy -Dmaven.test.skip=true'
                 }
