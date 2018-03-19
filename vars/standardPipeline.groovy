@@ -1,9 +1,8 @@
 def call(body) {
 
-    def config = [:]
-        body.resolveStrategy = Closure.DELEGATE_FIRST
-        body.delegate = config
-        body()
+    def getGitBranchName() {
+       return scm.branches[0].name
+    }
 
     properties([
         durabilityHint('PERFORMANCE_OPTIMIZED')
@@ -16,7 +15,7 @@ def call(body) {
         try {
             stage('Checkout') {
                 echo "parameters = ${VERSION} e ${NEXT_VERSION}"
-                echo "BRANCH =  ${config.branch}"
+                echo getGitBranchName()
                 sh 'printenv'
                 checkout scm
             }
