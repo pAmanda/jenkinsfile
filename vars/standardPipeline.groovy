@@ -29,13 +29,13 @@ def call(body) {
                 sh "mvn clean install -Dmaven.test.skip=true -Dmaven.javadoc.skip=true"
             }
             stage('Test') {
-                if(!BRANCH_NAME.contains("feature")) {
+                if(!branch_is_feature()) {
                     echo "Initializing test phase"
                     sh "mvn test"
                 }
             }
             stage ('Analyse') {
-                if(!BRANCH_NAME.contains("feature")) {
+                if(!branch_is_feature()) {
                     echo "Initializing Analyse phase"
                     withSonarQubeEnv('Sonar') {
                         sh "mvn sonar:sonar"
@@ -43,7 +43,7 @@ def call(body) {
                 }
             }
             stage('Quality Gate') {
-                 if(!BRANCH_NAME.contains("feature")) {
+                 if(!branch_is_feature()) {
                     echo "Initializing Quality Gate phase"
                     timeout(time: 1, unit: 'HOURS') {
                         def qg = waitForQualityGate()
@@ -54,31 +54,29 @@ def call(body) {
                 }
             }
             stage('Archive') {
-                if(BRANCH_NAME.contains("master") || BRANCH_NAME.contains("hotfix")) {
+                if(branch_is_master() || branch_is_hotfix()) {
                     echo 'Initializing Archive phase'
                     sh 'mvn deploy -Dmaven.test.skip=true'
                 }
             }
             stage ('Release') {
                 if(VERSION != NEXT_VERSION) {
-                    switch(BRANCH_NAME){
-                        case "origin/master":
-                            echo 'Initializing Release phase'
-                            sh 'git checkout master'
-                            sh 'mvn -B release:prepare -DreleaseVersion=${VERSION} -DdevelopmentVersion=${NEXT_VERSION}'
-                            break
-                        case "origin/hotfix":
-                            echo 'Initializing Release phase'
-                            sh 'git checkout hotfix'
-                            sh 'mvn -B release:prepare -DreleaseVersion=${VERSION} -DdevelopmentVersion=${NEXT_VERSION}'
+                    if(branch_is_master()) {
+                        echo 'Initializing Release phase'
+                        sh 'git checkout master'
+                        sh 'mvn -B release:prepare -DreleaseVersion=${VERSION} -DdevelopmentVersion=${NEXT_VERSION}'
+                    } else if(branch_is_hotfix()) {
+                        echo 'Initializing Release phase'
+                        sh 'git checkout hotfix'
+                        sh 'mvn -B release:prepare -DreleaseVersion=${VERSION} -DdevelopmentVersion=${NEXT_VERSION}'
                     }
                 }
             }
                 
             stage('Docker') {
                 if(VERSION != NEXT_VERSION) {
-                    if(BRANCH_NAME.contains("master") || BRANCH_NAME.contains("hotfix")) {
-                         echo 'Initializing Docker phase'
+                    if(branch_is_master() || branch_is_hotfix()) {
+                        echo 'Initializing Docker phase'
                         //sh "mvn package docker:build docker:push"
                     }
                 }
@@ -88,4 +86,24 @@ def call(body) {
             throw err
         }
     }
+}
+
+def branch_is_feature() {
+    return test_branch_name("origin/feature/")
+}
+
+def branch_is_master() {
+    return test_branch_name("origin/master")
+}
+
+def branch_is_develop() {
+    return test_branch_name("origin/develop")
+}
+
+def branch_is_hotfix() {
+    return test_branch_name("origin/hotfix/")
+}
+
+def test_branch_name(branch) {
+    return VARS.GIT_BRANCH.startsWith(branch)
 }
