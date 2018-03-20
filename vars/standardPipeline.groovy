@@ -100,23 +100,23 @@ def call(body) {
     }
 
 
-def branch_is_feature() {
+def boolean branch_is_feature() {
     return test_branch_name("origin/feature/")
 }
 
-def branch_is_master() {
+def boolean branch_is_master() {
     return test_branch_name("origin/master")
 }
 
-def branch_is_develop() {
+def boolean branch_is_develop() {
     return test_branch_name("origin/develop")
 }
 
-def branch_is_hotfix() {
+def boolean branch_is_hotfix() {
     return test_branch_name("origin/hotfix/")
 }
 
-def test_branch_name(branch) {
+def boolean test_branch_name(branch) {
     return VARS.GIT_BRANCH.startsWith(branch)
 }
 
