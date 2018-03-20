@@ -12,12 +12,13 @@ def call(body) {
         def BRANCH_NAME = VARS.GIT_BRANCH
         def COMMIT_MESSAGE = sh (script: 'git log -1 --pretty=%B',returnStdout: true).trim()
 
+        if(COMMIT_MESSAGE.contains("[maven-release-plugin]")) {
+            currentBuild.result = 'FAILURE'
+            sh "exit ./build.sh" 
+        }
+
         try {
             stage('Checkout') {
-                if(COMMIT_MESSAGE.contains("[maven-release-plugin]")) {
-                   currentBuild.result = 'FAILURE'
-                   sh "exit ./build.sh" 
-                }
                 checkout scm
                 echo "COMMIT_MESSAGE =  " + COMMIT_MESSAGE
                 echo "parameters = " + VERSION + " e " + NEXT_VERSION
