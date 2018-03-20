@@ -1,5 +1,3 @@
-PBRANCH_NAME = ''
-
 def call(body) {
 
     properties([
@@ -12,8 +10,8 @@ def call(body) {
         deleteDir()
         def VARS = checkout scm
 
-        if (PBRANCH_NAME == '') {
-            PBRANCH_NAME = VARS.GIT_BRANCH
+        if (env.PBRANCH_NAME) {
+            env.PBRANCH_NAME = VARS.GIT_BRANCH
         }
 
         env.PATH = "${tool 'Maven3'}/bin:${env.PATH}"
@@ -115,5 +113,5 @@ def Boolean branch_is_hotfix() {
 }
 
 def Boolean test_branch_name(branch) {
-    return PBRANCH_NAME.startsWith(branch)
+    return env.PBRANCH_NAME.startsWith(branch)
 }
