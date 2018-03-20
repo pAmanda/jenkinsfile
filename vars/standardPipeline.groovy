@@ -1,3 +1,5 @@
+PBRANCH_NAME = ''
+
 def call(body) {
 
     properties([
