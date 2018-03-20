@@ -67,7 +67,7 @@ def call(body) {
                         sh 'mvn -B release:prepare -DreleaseVersion=${VERSION} -DdevelopmentVersion=${NEXT_VERSION}'
                     } else if(branch_is_hotfix()) {
                         echo 'Initializing Release phase'
-                        sh 'git checkout hotfix'
+                        sh 'git checkout '+PBRANCH_NAME
                         sh 'mvn -B release:prepare -DreleaseVersion=${VERSION} -DdevelopmentVersion=${NEXT_VERSION}'
                     }
                 }
@@ -86,7 +86,7 @@ def call(body) {
             throw err
         }
     }
-}
+
 
 def branch_is_feature() {
     return test_branch_name("origin/feature/")
@@ -106,4 +106,6 @@ def branch_is_hotfix() {
 
 def test_branch_name(branch) {
     return VARS.GIT_BRANCH.startsWith(branch)
+}
+
 }
