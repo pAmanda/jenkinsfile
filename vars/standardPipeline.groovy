@@ -9,7 +9,11 @@ def call(body) {
         
         deleteDir()
         def VARS = checkout scm
-        //def BRANCH_NAME = VARS.GIT_BRANCH
+
+        if (PBRANCH_NAME == null) {
+            PBRANCH_NAME = VARS.GIT_BRANCH
+        }
+
         env.PATH = "${tool 'Maven3'}/bin:${env.PATH}"
         env.PATH = "${tool 'jdk1.8'}/bin:${env.PATH}"
 
