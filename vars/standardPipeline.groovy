@@ -19,7 +19,8 @@ def call(body) {
 
         try {
             stage('Checkout') {
-                checkout scm
+                //checkout scm
+                sh 'git checkout '+PBRANCH_NAME
                 echo "COMMIT_MESSAGE =  " + COMMIT_MESSAGE
                 echo "parameters = " + VERSION + " e " + NEXT_VERSION
                 //echo "branch = " + BRANCH_NAME
