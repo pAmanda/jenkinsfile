@@ -21,6 +21,7 @@ def call(body) {
         
         deleteDir()
         def VARS = checkout scm
+        env.PATH = "${tool 'Maven3'}/bin:${env.PATH}"
         def BRANCH_NAME = VARS.GIT_BRANCH
         def COMMIT_MESSAGE = sh (script: 'git log -1 --pretty=%B',returnStdout: true).trim()
 
