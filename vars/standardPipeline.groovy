@@ -98,26 +98,25 @@ def call(body) {
             throw err
         }
     }
+}
 
 
-def boolean branch_is_feature() {
+def Boolean branch_is_feature() {
     return test_branch_name("origin/feature/")
 }
 
-def boolean branch_is_master() {
+def Boolean branch_is_master() {
     return test_branch_name("origin/master")
 }
 
-def boolean branch_is_develop() {
+def Boolean branch_is_develop() {
     return test_branch_name("origin/develop")
 }
 
-def boolean branch_is_hotfix() {
+def Boolean branch_is_hotfix() {
     return test_branch_name("origin/hotfix/")
 }
 
-def boolean test_branch_name(branch) {
+def Boolean test_branch_name(branch) {
     return VARS.GIT_BRANCH.startsWith(branch)
-}
-
 }
