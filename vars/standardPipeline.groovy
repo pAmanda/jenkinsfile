@@ -1,4 +1,4 @@
-VARS = checkout scm
+VARS = ''
 
 def call(body) {
 
@@ -11,6 +11,7 @@ def call(body) {
         
         deleteDir()
         //def VARS = checkout scm
+        VARS = checkout scm
         //def BRANCH_NAME = VARS.GIT_BRANCH
         def COMMIT_MESSAGE = sh (script: 'git log -1 --pretty=%B',returnStdout: true).trim()
 
