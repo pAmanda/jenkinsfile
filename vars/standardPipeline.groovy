@@ -12,7 +12,7 @@ def call(body) {
         deleteDir()
         def VARS = checkout scm
 
-        if (PBRANCH_NAME == null) {
+        if (PBRANCH_NAME == '') {
             PBRANCH_NAME = VARS.GIT_BRANCH
         }
 
