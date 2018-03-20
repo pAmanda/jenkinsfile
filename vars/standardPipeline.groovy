@@ -1,6 +1,18 @@
 def call(body) {
 
     properties([
+        // parameters([
+        // string(
+        //  defaultValue: "1.0.0-SNAPSHOT",
+        //  description: 'Number of version',
+        //  name: 'VERSION'
+        // ),
+        // string(
+        //  defaultValue: "1.0.0-SNAPSHOT",
+        //  description: 'Next number of version',
+        //  name: 'NEXT_VERSION'
+        // )
+        // ])
         durabilityHint('PERFORMANCE_OPTIMIZED')
     ])
     
