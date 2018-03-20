@@ -8,14 +8,16 @@ def call(body) {
         // Clean workspace before doing anything
         
         deleteDir()
+        def VARS = checkout scm
+        //def BRANCH_NAME = VARS.GIT_BRANCH
         env.PATH = "${tool 'Maven3'}/bin:${env.PATH}"
         env.PATH = "${tool 'jdk1.8'}/bin:${env.PATH}"
-        def COMMIT_MESSAGE = sh (script: 'git log -1 --pretty=%B',returnStdout: true).trim()
 
         try {
             stage('Checkout') {
                 //checkout scm
                 sh 'git checkout '+PBRANCH_NAME
+                def COMMIT_MESSAGE = sh (script: 'git log -1 --pretty=%B',returnStdout: true).trim()
                 echo "COMMIT_MESSAGE =  " + COMMIT_MESSAGE
                 echo "parameters = " + VERSION + " e " + NEXT_VERSION
                 //echo "branch = " + BRANCH_NAME
