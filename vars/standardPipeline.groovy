@@ -1,3 +1,5 @@
+VARS = checkout scm
+
 def call(body) {
 
     properties([
@@ -105,6 +107,5 @@ def Boolean branch_is_hotfix() {
 }
 
 def Boolean test_branch_name(branch) {
-    
-    return (checkout scm).GIT_BRANCH.startsWith(branch)
+    return VARS.GIT_BRANCH.startsWith(branch)
 }
