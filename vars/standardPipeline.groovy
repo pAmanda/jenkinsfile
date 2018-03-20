@@ -13,6 +13,8 @@ def call(body) {
         //def VARS = checkout scm
         VARS = checkout scm
         //def BRANCH_NAME = VARS.GIT_BRANCH
+        env.PATH = "${tool 'Maven3'}/bin:${env.PATH}"
+        env.PATH = "${tool 'jdk1.8'}/bin:${env.PATH}"
         def COMMIT_MESSAGE = sh (script: 'git log -1 --pretty=%B',returnStdout: true).trim()
 
         try {
