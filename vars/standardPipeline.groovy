@@ -1,5 +1,3 @@
-VARS = ''
-
 def call(body) {
 
     properties([
@@ -10,9 +8,6 @@ def call(body) {
         // Clean workspace before doing anything
         
         deleteDir()
-        //def VARS = checkout scm
-        VARS = checkout scm
-        //def BRANCH_NAME = VARS.GIT_BRANCH
         env.PATH = "${tool 'Maven3'}/bin:${env.PATH}"
         env.PATH = "${tool 'jdk1.8'}/bin:${env.PATH}"
         def COMMIT_MESSAGE = sh (script: 'git log -1 --pretty=%B',returnStdout: true).trim()
@@ -111,5 +106,5 @@ def Boolean branch_is_hotfix() {
 }
 
 def Boolean test_branch_name(branch) {
-    return VARS.GIT_BRANCH.startsWith(branch)
+    return PBRANCH_NAME.startsWith(branch)
 }
