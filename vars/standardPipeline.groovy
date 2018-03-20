@@ -1,5 +1,3 @@
-def VARS = checkout scm
-
 def call(body) {
 
     properties([
@@ -10,9 +8,8 @@ def call(body) {
         // Clean workspace before doing anything
         
         deleteDir()
-        
-        //env.PATH = "${tool 'Maven3'}/bin:${env.PATH}"
-        def BRANCH_NAME = VARS.GIT_BRANCH
+        //def VARS = checkout scm
+        //def BRANCH_NAME = VARS.GIT_BRANCH
         def COMMIT_MESSAGE = sh (script: 'git log -1 --pretty=%B',returnStdout: true).trim()
 
         try {
@@ -20,7 +17,7 @@ def call(body) {
                 checkout scm
                 echo "COMMIT_MESSAGE =  " + COMMIT_MESSAGE
                 echo "parameters = " + VERSION + " e " + NEXT_VERSION
-                echo "branch = " + BRANCH_NAME
+                //echo "branch = " + BRANCH_NAME
                 // if(COMMIT_MESSAGE.contains("[maven-release-plugin]")) {
                 //     currentBuild.result = 'FAILURE'
                 //     sh "exit ./build.sh 1" 
@@ -108,5 +105,6 @@ def Boolean branch_is_hotfix() {
 }
 
 def Boolean test_branch_name(branch) {
-    return VARS.GIT_BRANCH.startsWith(branch)
+    
+    return (checkout scm).GIT_BRANCH.startsWith(branch)
 }
