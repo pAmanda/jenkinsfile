@@ -37,20 +37,20 @@ def call(body) {
             stage ('Analyse') {
                 if(!BRANCH_NAME.contains("feature")) {
                     echo "Initializing Analyse phase"
-                    //withSonarQubeEnv('Sonar') {
-                        //sh "mvn sonar:sonar"
-                    //}
+                    withSonarQubeEnv('Sonar') {
+                        sh "mvn sonar:sonar"
+                    }
                 }
             }
             stage('Quality Gate') {
                  if(!BRANCH_NAME.contains("feature")) {
                     echo "Initializing Quality Gate phase"
-                    //timeout(time: 1, unit: 'HOURS') {
-                      //  def qg = waitForQualityGate()
-                       // if (qg.status != 'OK') {
-                         //   error "Pipeline aborted due to quality gate failure: ${qg.status}"
-                        //}
-                    //}
+                    timeout(time: 1, unit: 'HOURS') {
+                        def qg = waitForQualityGate()
+                        if (qg.status != 'OK') {
+                            error "Pipeline aborted due to quality gate failure: ${qg.status}"
+                        }
+                    }
                 }
             }
             stage('Archive') {
