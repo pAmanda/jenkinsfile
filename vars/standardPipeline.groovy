@@ -5,13 +5,20 @@ def call(body) {
     ])
     
     node {
-        // Clean workspace before doing anything
-        
+        // Clean workspace before doing anything        
         deleteDir()
+
         def VARS = checkout scm
 
         if (!env.PBRANCH_NAME) {
             env.PBRANCH_NAME = VARS.GIT_BRANCH
+        }
+
+        def COMMIT_MESSAGE = sh (script: 'git log -1 --pretty=%B',returnStdout: true).trim()
+
+        if(COMMIT_MESSAGE.contains("[maven-release-plugin]")) {
+            currentBuild.result = 'FAILURE'
+            sh "exit ./build.sh 1" 
         }
 
         env.PATH = "${tool 'Maven3'}/bin:${env.PATH}"
@@ -20,16 +27,10 @@ def call(body) {
         try {
             stage('Checkout') {
                 //checkout scm
-                echo "branch = " + PBRANCH_NAME
+                echo "branch name = " + PBRANCH_NAME
                 sh 'git checkout '+PBRANCH_NAME
-                def COMMIT_MESSAGE = sh (script: 'git log -1 --pretty=%B',returnStdout: true).trim()
-                echo "COMMIT_MESSAGE =  " + COMMIT_MESSAGE
+                echo "Commit message =  " + COMMIT_MESSAGE
                 echo "parameters = " + VERSION + " e " + NEXT_VERSION
-                
-                // if(COMMIT_MESSAGE.contains("[maven-release-plugin]")) {
-                //     currentBuild.result = 'FAILURE'
-                //     sh "exit ./build.sh 1" 
-                // }
             }
             stage('Build') {
                 echo "Initializing Build phase"
