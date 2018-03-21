@@ -21,8 +21,8 @@ def call(body) {
             sh "exit ./build.sh 1" 
         }
 
-        //env.PATH = "${tool 'Maven3'}/bin:${env.PATH}"
-        //env.PATH = "${tool 'jdk1.8'}/bin:${env.PATH}"
+        env.PATH = "${tool 'Maven3'}/bin:${env.PATH}"
+        env.PATH = "${tool 'jdk1.8'}/bin:${env.PATH}"
 
         try {
             stage('Checkout') {
