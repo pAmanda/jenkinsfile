@@ -16,7 +16,7 @@ def call(body) {
 
         def COMMIT_MESSAGE = sh (script: 'git log -1 --pretty=%B',returnStdout: true).trim()
 
-        if(COMMIT_MESSAGE.contains("[maven-release-plugin]")) {
+        if(COMMIT_MESSAGE.startsWith("[maven-release-plugin]")) {
             currentBuild.result = 'FAILURE'
             sh "exit ./build.sh 1" 
         }
