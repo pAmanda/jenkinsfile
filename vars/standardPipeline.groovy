@@ -45,7 +45,7 @@ def call(body) {
             stage ('Analyse') {
                 if(!branch_is_feature()) {
                     echo "Initializing Analyse phase"
-                    withSonarQubeEnv('Sonar') {
+                    withSonarQubeEnv('sonar') {
                         sh "mvn sonar:sonar"
                     }
                 }
