@@ -50,6 +50,9 @@ def call(body) {
                     }
                 }
             }
+            
+            sh 'sleep 10'
+            
             stage('Quality Gate') {
                  if(!branch_is_feature()) {
                     echo "Initializing Quality Gate phase"
