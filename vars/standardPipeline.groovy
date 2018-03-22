@@ -41,7 +41,7 @@ def call(body) {
                     echo "Initializing test phase"
                     sh "mvn test"
                 }
-            }*/
+            }
             stage ('Analyse') {
                 if(!branch_is_feature()) {
                     echo "Initializing Analyse phase"
@@ -65,7 +65,7 @@ def call(body) {
                         }
                     }
                 }
-            }
+            }*/
             stage('Archive') {
                 if(branch_is_master() || branch_is_hotfix()) {
                     echo 'Initializing Archive phase'
