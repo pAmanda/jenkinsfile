@@ -51,6 +51,8 @@ def call(body) {
                 }
             }
             
+            // https://stackoverflow.com/questions/45693418/sonarqube-quality-gate-not-sending-webhook-to-jenkins
+            // Please, fix it!
             sh 'sleep 10'
             
             stage('Quality Gate') {
