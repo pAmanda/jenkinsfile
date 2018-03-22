@@ -36,26 +36,26 @@ def call(body) {
                 echo "Initializing Build phase"
                 sh "mvn clean install -Dmaven.test.skip=true -Dmaven.javadoc.skip=true"
             }
-            stage('Test') {
+            /*stage('Test') {
                 if(!branch_is_feature()) {
                     echo "Initializing test phase"
                     sh "mvn test"
                 }
-            }
-            stage ('Analyse') {
+            }*/
+            /*stage ('Analyse') {
                 if(!branch_is_feature()) {
                     echo "Initializing Analyse phase"
                     withSonarQubeEnv('sonar') {
                         sh "mvn sonar:sonar"
                     }
                 }
-            }
+            }*/
             
             // https://stackoverflow.com/questions/45693418/sonarqube-quality-gate-not-sending-webhook-to-jenkins
             // Please, fix it!
-            sh 'sleep 10'
+            //sh 'sleep 10'
             
-            stage('Quality Gate') {
+            /*stage('Quality Gate') {
                  if(!branch_is_feature()) {
                     echo "Initializing Quality Gate phase"
                     timeout(time: 1, unit: 'HOURS') {
@@ -65,7 +65,7 @@ def call(body) {
                         }
                     }
                 }
-            }
+            }*/
             stage('Archive') {
                 if(branch_is_master() || branch_is_hotfix()) {
                     echo 'Initializing Archive phase'
