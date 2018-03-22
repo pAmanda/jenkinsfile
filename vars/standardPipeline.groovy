@@ -91,6 +91,11 @@ def call(body) {
                     if(branch_is_master() || branch_is_hotfix()) {
                         echo 'Initializing Docker phase'
                         //sh "mvn package docker:build docker:push"
+                        docker.withRegistry('https://docker-registry-default.pocose.cabal.com.br', 'credentials-id') {
+                            def customImage = docker.build("my-image")
+                            /* Push the container to the custom Registry */
+                            customImage.push()
+                        }
                     }
                 }
             }
