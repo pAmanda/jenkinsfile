@@ -9,9 +9,8 @@ def call(body) {
         deleteDir()
         
         // Exporting Docker env variables
-        env.DOCKER_TLS_VERIFY=1
         env.DOCKER_HOST="tcp://192.168.99.100:2376"
-        //env.DOCKER_CERT_PATH="/Users/" + env.USER + "/.docker/machine/machines/default"
+        env.DOCKER_CERT_PATH="/Users/" + env.USER + "/.docker/machine/machines/"
 
         def VARS = checkout scm
 
