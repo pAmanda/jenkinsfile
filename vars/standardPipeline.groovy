@@ -3,9 +3,7 @@ def call(body) {
     properties([
         durabilityHint('PERFORMANCE_OPTIMIZED')
     ])
-    
-    
-    
+
     node {
         // Clean workspace before doing anything        
         deleteDir()
