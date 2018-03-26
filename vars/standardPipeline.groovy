@@ -108,7 +108,7 @@ def call(body) {
                             //app.push()
                             //app.push("${env.BUILD_NUMBER}")
                             //app.push("latest")
-                        }
+                        //}
                     }
                 }
             }
