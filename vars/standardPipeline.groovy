@@ -95,7 +95,6 @@ def call(body) {
                 if(VERSION != NEXT_VERSION) {
                     if(branch_is_master() || branch_is_hotfix()) {
                         echo 'Initializing Docker phase'
-                        sh "docker login -u anderson.feitosa --password-stdin"
                         sh "mvn package docker:build docker:push"
                     }
                 }
