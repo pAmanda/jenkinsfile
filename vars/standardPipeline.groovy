@@ -104,7 +104,7 @@ def call(body) {
                     if(branch_is_master() || branch_is_hotfix()) {
                         echo 'Initializing Docker phase'
                         //sh "mvn package docker:build docker:push"
-                        docker.withRegistry('https://docker-registry-default.pocose.cabal.com.br', 'docker-credentials-id') {
+                        docker.withRegistry('https://sa-scs-test-01.cabal.com.br:8443', 'docker-credentials-id') {
                             def app = docker.build("sippe-jenkins-poc.jar")
                             /* Push the container to the custom Registry */
                             app.push()
