@@ -101,13 +101,13 @@ def call(body) {
                 if(VERSION != NEXT_VERSION) {
                     if(branch_is_master() || branch_is_hotfix()) {
                         echo 'Initializing Docker phase'
-                        //sh "mvn package docker:build docker:push"
-                        docker.withRegistry('https://sa-scs-test-01.cabal.com.br:8443', 'docker-credentials-id') {
-                            def app = docker.build("sippe-jenkins-poc.jar")
+                        sh "mvn package docker:build docker:push"
+                        //docker.withRegistry('https://sa-scs-test-01.cabal.com.br:8443', 'docker-credentials-id') {
+                            //def app = docker.build("sippe-jenkins-poc.jar")
                             /* Push the container to the custom Registry */
-                            app.push()
-                            app.push("${env.BUILD_NUMBER}")
-                            app.push("latest")
+                            //app.push()
+                            //app.push("${env.BUILD_NUMBER}")
+                            //app.push("latest")
                         }
                     }
                 }
