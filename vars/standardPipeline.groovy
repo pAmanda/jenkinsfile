@@ -105,7 +105,7 @@ def call(body) {
                         echo 'Initializing Docker phase'
                         //sh "mvn package docker:build docker:push"
                         docker.withRegistry('https://docker-registry-default.pocose.cabal.com.br', 'docker-credentials-id') {
-                            def app = docker.build("sippe-jenkins-poc")
+                            def app = docker.build("sippe-jenkins-poc.jar")
                             /* Push the container to the custom Registry */
                             app.push()
                             app.push("${env.BUILD_NUMBER}")
