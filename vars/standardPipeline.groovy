@@ -4,9 +4,20 @@ def call(body) {
         durabilityHint('PERFORMANCE_OPTIMIZED')
     ])
     
+    
+    
     node {
         // Clean workspace before doing anything        
         deleteDir()
+        
+        // Exporting Docker env variables
+        env.DOCKER_TLS_VERIFY=1
+        env.DOCKER_HOST="tcp://192.168.99.100:2376"
+        env.DOCKER_CERT_PATH="/Users/abraao.queiroz/.docker/machine/machines/default"
+        env.DOCKER_MACHINE_NAME="default"
+        
+        echo "Exporting docker enviroment variables"
+        //sh "eval $(docker-machine env dev)"
 
         def VARS = checkout scm
 
@@ -18,6 +29,7 @@ def call(body) {
 
         if(COMMIT_MESSAGE.startsWith("[maven-release-plugin]")) {
             currentBuild.result = 'FAILURE'
+            echo "Commit message starts with maven-release-plugin. Exiting..."
             sh "exit ./build.sh 1" 
         }
 
@@ -91,10 +103,12 @@ def call(body) {
                     if(branch_is_master() || branch_is_hotfix()) {
                         echo 'Initializing Docker phase'
                         //sh "mvn package docker:build docker:push"
-                        docker.withRegistry('https://docker-registry-default.pocose.cabal.com.br', 'docker-credentials-id') {
-                            def customImage = docker.build("my-image")
+                        docker.withRegistry('https://docker-registry-default.pocose.cabal.com.br', 'docker-openshift-credentials') {
+                            def app = docker.build("sippe-jenkins-poc")
                             /* Push the container to the custom Registry */
-                            customImage.push()
+                            app.push()
+                            app.push("${env.BUILD_NUMBER}")
+                            app.push("latest")
                         }
                     }
                 }
