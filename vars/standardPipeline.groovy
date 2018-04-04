@@ -20,7 +20,7 @@ def call(body) {
 
         def COMMIT_MESSAGE = sh (script: 'git log -1 --pretty=%B',returnStdout: true).trim()
 
-        if(COMMIT_MESSAGE.startsWith("[maven-release-plugin]") && VERSION != NEXT_VERSION) {
+        if(COMMIT_MESSAGE.startsWith("[maven-release-plugin]")) {
             currentBuild.result = 'FAILURE'
             echo "Commit message starts with maven-release-plugin. Exiting..."
             sh "exit ./build.sh 1" 
