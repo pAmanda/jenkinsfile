@@ -41,7 +41,7 @@ def call(body) {
                 echo "Initializing Build phase"
                 sh "mvn clean install -Dmaven.test.skip=true -Dmaven.javadoc.skip=true"
             }
-            /*stage('Test') {
+            stage('Test') {
                 if(!branch_is_feature()) {
                     echo "Initializing test phase"
                     sh "mvn test"
@@ -70,7 +70,7 @@ def call(body) {
                         }
                     }
                 }
-            }*/
+            }
             stage('Archive') {
                 if(branch_is_master() || branch_is_hotfix()) {
                     echo 'Initializing Archive phase'
