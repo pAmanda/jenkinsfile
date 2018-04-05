@@ -89,11 +89,18 @@ def call(body) {
             
             stage ('Release') {
                 if(VERSION != NEXT_VERSION) {
-                    if(branch_is_master() || branch_is_hotfix()) {
+                    if(branch_is_master()) {
                         echo "===================================================="
                         echo "Release Stage"
                         echo "===================================================="
-                        sh 'git checkout '+BRANCH_NAME
+                        sh 'git checkout master'
+                        sh 'mvn -B release:prepare -DreleaseVersion=${VERSION} -DdevelopmentVersion=${NEXT_VERSION}'
+                    }
+                    if(branch_is_hotfix()) {
+                        echo "===================================================="
+                        echo "Release Stage"
+                        echo "===================================================="
+                        sh 'git checkout '+ BRANCH_NAME
                         sh 'mvn -B release:prepare -DreleaseVersion=${VERSION} -DdevelopmentVersion=${NEXT_VERSION}'
                     }
                 }
