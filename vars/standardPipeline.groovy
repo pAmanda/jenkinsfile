@@ -14,8 +14,8 @@ def call(body) {
 
         def VARS = checkout scm
 
-        if (!env.PBRANCH_NAME) {
-            env.PBRANCH_NAME = VARS.GIT_BRANCH
+        if (!env.BRANCH_NAME) {
+            env.BRANCH_NAME = VARS.GIT_BRANCH
         }
 
         def COMMIT_MESSAGE = sh (script: 'git log -1 --pretty=%B',returnStdout: true).trim()
@@ -32,8 +32,8 @@ def call(body) {
         try {
             stage('Checkout') {
                 //checkout scm
-                echo "branch name = " + PBRANCH_NAME
-                sh 'git checkout '+PBRANCH_NAME
+                echo "branch name = " + BRANCH_NAME
+                sh 'git checkout '+BRANCH_NAME
                 echo "Commit message =  " + COMMIT_MESSAGE
                 echo "parameters = " + VERSION + " e " + NEXT_VERSION
             }
