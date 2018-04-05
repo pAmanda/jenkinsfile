@@ -86,6 +86,7 @@ def call(body) {
                     sh 'mvn deploy -Dmaven.test.skip=true'
                 }
             }
+            
             stage ('Release') {
                 if(VERSION != NEXT_VERSION) {
                     if(branch_is_master() || branch_is_hotfix()) {
