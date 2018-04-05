@@ -108,7 +108,7 @@ def call(body) {
                     }
                 }
             }
-        } catch (err) {
+        } catch (error) {
             currentBuild.result = 'FAILED'
             throw err
         }
