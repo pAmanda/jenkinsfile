@@ -31,6 +31,9 @@ def call(body) {
 
         try {
             stage('Checkout') {
+                echo "===================================================="
+                echo "Checkout Stage"
+                echo "===================================================="
                 //checkout scm
                 echo "branch name = " + BRANCH_NAME
                 sh 'git checkout '+BRANCH_NAME
@@ -38,31 +41,35 @@ def call(body) {
                 echo "parameters = " + VERSION + " e " + NEXT_VERSION
             }
             stage('Build') {
-                echo "Initializing Build phase"
+                echo "===================================================="
+                echo "Build Stage"
+                echo "===================================================="
                 sh "mvn clean install -Dmaven.test.skip=true -Dmaven.javadoc.skip=true"
             }
             stage('Test') {
                 if(!branch_is_feature()) {
-                    echo "Initializing test phase"
+                    echo "===================================================="
+                    echo "Test Stage"
+                    echo "===================================================="
                     sh "mvn test"
                 }
             }
             stage ('Analyse') {
                 if(!branch_is_feature()) {
-                    echo "Initializing Analyse phase"
+                    echo "===================================================="
+                    echo "Analyse Stage"
+                    echo "===================================================="
                     withSonarQubeEnv('sonar') {
                         sh "mvn sonar:sonar"
                     }
                 }
             }
             
-            // https://stackoverflow.com/questions/45693418/sonarqube-quality-gate-not-sending-webhook-to-jenkins
-            // Please, fix it!
-            sh 'sleep 10'
-            
             stage('Quality Gate') {
                  if(!branch_is_feature()) {
-                    echo "Initializing Quality Gate phase"
+                    echo "===================================================="
+                    echo "Quality Gate Stage"
+                    echo "===================================================="
                     timeout(time: 1, unit: 'HOURS') {
                         def qg = waitForQualityGate()
                         if (qg.status != 'OK') {
@@ -73,19 +80,19 @@ def call(body) {
             }
             stage('Archive') {
                 if(branch_is_master() || branch_is_hotfix()) {
-                    echo 'Initializing Archive phase'
+                    echo "===================================================="
+                    echo "Archive Stage"
+                    echo "===================================================="
                     sh 'mvn deploy -Dmaven.test.skip=true'
                 }
             }
             stage ('Release') {
                 if(VERSION != NEXT_VERSION) {
-                    if(branch_is_master()) {
-                        echo 'Initializing Release phase'
-                        sh 'git checkout master'
-                        sh 'mvn -B release:prepare -DreleaseVersion=${VERSION} -DdevelopmentVersion=${NEXT_VERSION}'
-                    } else if(branch_is_hotfix()) {
-                        echo 'Initializing Release phase'
-                        sh 'git checkout '+PBRANCH_NAME
+                    if(branch_is_master() || branch_is_hotfix()) {
+                        echo "===================================================="
+                        echo "Release Stage"
+                        echo "===================================================="
+                        sh 'git checkout '+BRANCH_NAME
                         sh 'mvn -B release:prepare -DreleaseVersion=${VERSION} -DdevelopmentVersion=${NEXT_VERSION}'
                     }
                 }
@@ -94,7 +101,9 @@ def call(body) {
             stage('Docker') {
                 if(VERSION != NEXT_VERSION) {
                     if(branch_is_master() || branch_is_hotfix()) {
-                        echo 'Initializing Docker phase'
+                        echo "===================================================="
+                        echo "Docker Stage"
+                        echo "===================================================="
                         sh "mvn package docker:build docker:push"
                     }
                 }
@@ -105,7 +114,6 @@ def call(body) {
         }
     }
 }
-
 
 def Boolean branch_is_feature() {
     return test_branch_name("origin/feature/")
