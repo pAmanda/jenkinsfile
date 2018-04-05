@@ -124,5 +124,5 @@ def Boolean branch_is_hotfix() {
 }
 
 def Boolean test_branch_name(branch) {
-    return env.PBRANCH_NAME.startsWith(branch)
+    return env.BRANCH_NAME.startsWith(branch)
 }
