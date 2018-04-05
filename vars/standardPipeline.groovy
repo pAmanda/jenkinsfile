@@ -65,12 +65,14 @@ def call(body) {
                 }
             }
             
+            sh 'sleep 10'
+            
             stage('Quality Gate') {
                  if(!branch_is_feature()) {
                     echo "===================================================="
                     echo "Quality Gate Stage"
                     echo "===================================================="
-                    timeout(time: 1, unit: 'MINUTES') {
+                    timeout(time: 1, unit: 'HOURS') {
                         def qg = waitForQualityGate()
                         if (qg.status != 'OK') {
                             error "Pipeline aborted due to quality gate failure: ${qg.status}"
