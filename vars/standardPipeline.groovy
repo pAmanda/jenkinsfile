@@ -13,6 +13,7 @@ def call(body) {
         env.DOCKER_CERT_PATH="/Users/" + env.USER + "/.docker/machine/machines/default"
 
         def VARS = checkout scm
+        echo "Checando no repositorio = " + VARS
 
         if (!env.BRANCH_NAME) {
             env.BRANCH_NAME = VARS.GIT_BRANCH
