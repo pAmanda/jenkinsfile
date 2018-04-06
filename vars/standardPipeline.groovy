@@ -39,7 +39,6 @@ def call(body) {
                 //checkout scm
                 echo "branch name = " + BRANCH_NAME
                 sh 'git checkout '+ BRANCH_NAME
-                echo "Commit message =  " + COMMIT_MESSAGE
                 echo "parameters = " + VERSION + " e " + NEXT_VERSION
             }
             stage('Build') {
@@ -95,7 +94,6 @@ def call(body) {
                         echo "===================================================="
                         echo "Release Stage"
                         echo "===================================================="
-                        sh 'git checkout ' + env.BRANCH_NAME
                         sh 'mvn -B release:prepare -DreleaseVersion=${VERSION} -DdevelopmentVersion=${NEXT_VERSION}'
                     }
                 }
