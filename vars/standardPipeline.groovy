@@ -17,6 +17,8 @@ def call(body) {
         if (!env.BRANCH_NAME) {
             env.BRANCH_NAME = VARS.GIT_BRANCH
         }
+        
+        env.BRANCH_NAME = env.BRANCH_NAME.replaceAll("origin/", "").trim();
 
         def COMMIT_MESSAGE = sh (script: 'git log -1 --pretty=%B',returnStdout: true).trim()
 
@@ -124,19 +126,19 @@ def call(body) {
 }
 
 def Boolean branch_is_feature() {
-    return test_branch_name("origin/feature/")
+    return test_branch_name("feature/")
 }
 
 def Boolean branch_is_master() {
-    return test_branch_name("origin/master")
+    return test_branch_name("master")
 }
 
 def Boolean branch_is_develop() {
-    return test_branch_name("origin/develop")
+    return test_branch_name("develop")
 }
 
 def Boolean branch_is_hotfix() {
-    return test_branch_name("origin/hotfix/")
+    return test_branch_name("hotfix/")
 }
 
 def Boolean test_branch_name(branch) {
