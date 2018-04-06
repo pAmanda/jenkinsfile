@@ -19,7 +19,7 @@ def call(body) {
             env.BRANCH_NAME = VARS.GIT_BRANCH
         }
         
-        env.BRANCH_NAME = env.BRANCH_NAME.replaceAll("origin/", "").trim();
+        env.BRANCH_NAME = get_branch_name(env.BRANCH_NAME);
 
         def COMMIT_MESSAGE = sh (script: 'git log -1 --pretty=%B',returnStdout: true).trim()
 
@@ -115,6 +115,10 @@ def call(body) {
             throw error
         }
     }
+}
+
+def String get_branch_name(branch_name) {
+    return branch_name.replaceAll("origin/", "").trim();
 }
 
 def Boolean branch_is_feature() {
