@@ -18,6 +18,8 @@ def call(body) {
         def VARS = checkout scm
         def COMMIT_MESSAGE = sh (script: 'git log -1 --pretty=%B',returnStdout: true).trim()
         
+        echo 'env.Branch_Name = ' + env.BRANCH_NAME
+        
         if (COMMIT_MESSAGE.startsWith("[maven-release-plugin]") && !env.BRANCH_NAME) {
             currentBuild.result = 'SUCCESS'
             echo "Commit message starts with maven-release-plugin. Exiting..."
@@ -30,8 +32,8 @@ def call(body) {
                     echo "Checkout Stage"
                     echo "===================================================="
                     //checkout scm
-                    echo "branch name = " + BRANCH_NAME
-                    sh 'git checkout '+ BRANCH_NAME
+                    echo "branch name = " + env.BRANCH_NAME
+                    sh 'git checkout '+ env.BRANCH_NAME
                     echo "parameters = " + VERSION + " e " + NEXT_VERSION
                 }
                 stage('Build') {
