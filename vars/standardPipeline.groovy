@@ -12,26 +12,23 @@ def call(body) {
         // Change this variables
         env.DOCKER_HOST="tcp://192.168.99.100:2376"
         env.DOCKER_CERT_PATH="/Users/" + env.USER + "/.docker/machine/machines/default"
-
-        def VARS = checkout scm
-
-        if (!env.BRANCH_NAME) {
-            env.BRANCH_NAME = VARS.GIT_BRANCH
-        }
-        
-        env.BRANCH_NAME = get_branch_name(env.BRANCH_NAME);
-
-        def COMMIT_MESSAGE = sh (script: 'git log -1 --pretty=%B',returnStdout: true).trim()
-
-        if(COMMIT_MESSAGE.startsWith("[maven-release-plugin]")) {
-            currentBuild.result = 'FAILURE'
-            echo "Commit message starts with maven-release-plugin. Exiting..."
-            sh "exit ./build.sh 1" 
-        }
-
         env.PATH = "${tool 'Maven3'}/bin:${env.PATH}"
         env.PATH = "${tool 'jdk1.8'}/bin:${env.PATH}"
 
+        def VARS = checkout scm
+        def COMMIT_MESSAGE = sh (script: 'git log -1 --pretty=%B',returnStdout: true).trim()
+
+        if (!env.BRANCH_NAME) {
+            env.BRANCH_NAME = VARS.GIT_BRANCH
+            if(COMMIT_MESSAGE.startsWith("[maven-release-plugin]")) {
+                currentBuild.result = 'SUCCESS'
+                echo "Commit message starts with maven-release-plugin. Exiting..."
+                sh "exit ./build.sh 0" 
+            }
+        }
+        
+        env.BRANCH_NAME = get_branch_name(env.BRANCH_NAME);
+        
         try {
             stage('Checkout') {
                 echo "===================================================="
@@ -66,7 +63,7 @@ def call(body) {
                     }
                 }
             }
-            
+
             stage('Quality Gate') {
                  if(!branch_is_feature()) {
                     echo "===================================================="
@@ -88,7 +85,7 @@ def call(body) {
                     sh 'mvn deploy -Dmaven.test.skip=true'
                 }
             }
-            
+
             stage ('Release') {
                 if(VERSION != NEXT_VERSION) {
                     if(branch_is_master() || branch_is_hotfix()) {
@@ -99,7 +96,7 @@ def call(body) {
                     }
                 }
             }
-                
+
             stage('Docker') {
                 if(VERSION != NEXT_VERSION) {
                     if(branch_is_master() || branch_is_hotfix()) {
@@ -113,7 +110,7 @@ def call(body) {
         } catch (error) {
             currentBuild.result = 'FAILED'
             throw error
-        }
+        }   
     }
 }
 
