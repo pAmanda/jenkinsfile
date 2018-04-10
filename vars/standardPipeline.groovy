@@ -19,14 +19,14 @@ def call(body) {
         def COMMIT_MESSAGE = sh (script: 'git log -1 --pretty=%B',returnStdout: true).trim()
         
         if (COMMIT_MESSAGE.startsWith("[maven-release-plugin]") 
-            && ((env.BRANCH_NAME != '' || env.BRANCH_NAME == NULL)
+            && ((env.BRANCH_NAME != '' || env.BRANCH_NAME == null)
             || VERSION != NEXT_VERSION)) {
             
             currentBuild.result = 'SUCCESS'
             echo "Commit message starts with maven-release-plugin. Exiting..."
             
         } else {
-            env.BRANCH_NAME = (env.BRANCH_NAME == '' || env.BRANCH_NAME == NULL) ?  get_branch_name(VARS.GIT_BRANCH) : get_branch_name(env.BRANCH_NAME) 
+            env.BRANCH_NAME = (env.BRANCH_NAME == '' || env.BRANCH_NAME == null) ?  get_branch_name(VARS.GIT_BRANCH) : get_branch_name(env.BRANCH_NAME) 
             try {
                 stage('Checkout') {
                     echo "===================================================="
