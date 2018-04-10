@@ -19,7 +19,7 @@ def call(body) {
         def COMMIT_MESSAGE = sh (script: 'git log -1 --pretty=%B',returnStdout: true).trim()
         
         if (COMMIT_MESSAGE.startsWith("[maven-release-plugin]") 
-            && ((env.BRANCH_NAME != '' || env.BRANCH_NAME != null)
+            && ((env.BRANCH_NAME != '' || env.BRANCH_NAME == null)
             || VERSION != NEXT_VERSION)) {
             
             currentBuild.result = 'SUCCESS'
