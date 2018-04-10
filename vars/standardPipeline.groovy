@@ -21,10 +21,9 @@ def call(body) {
         if (COMMIT_MESSAGE.startsWith("[maven-release-plugin]") && !env.BRANCH_NAME) {
             currentBuild.result = 'SUCCESS'
             echo "Commit message starts with maven-release-plugin. Exiting..."
+            
         } else {
-
             env.BRANCH_NAME = env.BRANCH_NAME == null ? get_branch_name(VARS.GIT_BRANCH) : get_branch_name(env.BRANCH_NAME) 
-
             try {
                 stage('Checkout') {
                     echo "===================================================="
@@ -59,7 +58,6 @@ def call(body) {
                         }
                     }
                 }
-
                 stage('Quality Gate') {
                      if(!branch_is_feature()) {
                         echo "===================================================="
@@ -81,7 +79,6 @@ def call(body) {
                         sh 'mvn deploy -Dmaven.test.skip=true'
                     }
                 }
-
                 stage ('Release') {
                     if(VERSION != NEXT_VERSION) {
                         if(branch_is_master() || branch_is_hotfix()) {
@@ -92,7 +89,6 @@ def call(body) {
                         }
                     }
                 }
-
                 stage('Docker') {
                     if(VERSION != NEXT_VERSION) {
                         if(branch_is_master() || branch_is_hotfix()) {
