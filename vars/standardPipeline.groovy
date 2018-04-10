@@ -21,12 +21,12 @@ def call(body) {
         echo 'env.Branch_Name = ' + env.BRANCH_NAME
         echo ' VARS.GIT_BRANCH = ' + VARS.GIT_BRANCH
         
-        if (COMMIT_MESSAGE.startsWith("[maven-release-plugin]") && env.BRANCH_NAME?.trim()) {
+        if (COMMIT_MESSAGE.startsWith("[maven-release-plugin]") && env.BRANCH_NAME == '') {
             currentBuild.result = 'SUCCESS'
             echo "Commit message starts with maven-release-plugin. Exiting..."
             
         } else {
-            env.BRANCH_NAME = env.BRANCH_NAME?.trim() ? get_branch_name(VARS.GIT_BRANCH) : get_branch_name(env.BRANCH_NAME) 
+            env.BRANCH_NAME = env.BRANCH_NAME == '' ? get_branch_name(VARS.GIT_BRANCH) : get_branch_name(env.BRANCH_NAME) 
             try {
                 stage('Checkout') {
                     echo "===================================================="
