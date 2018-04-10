@@ -26,7 +26,7 @@ def call(body) {
             echo "Commit message starts with maven-release-plugin. Exiting..."
             
         } else {
-            env.BRANCH_NAME = env.BRANCH_NAME == '' ? get_branch_name(VARS.GIT_BRANCH) : get_branch_name(env.BRANCH_NAME) 
+            env.BRANCH_NAME = env.BRANCH_NAME?.trim() ? get_branch_name(VARS.GIT_BRANCH) : get_branch_name(env.BRANCH_NAME) 
             try {
                 stage('Checkout') {
                     echo "===================================================="
