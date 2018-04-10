@@ -131,6 +131,5 @@ def Boolean branch_is_hotfix() {
 }
 
 def Boolean test_branch_name(branch) {
-    echo 'stats with = ' + env.BRANCH_NAME
     return env.BRANCH_NAME.startsWith(branch)
 }
