@@ -20,11 +20,11 @@ def call(body) {
 
         if (!env.BRANCH_NAME) {
             env.BRANCH_NAME = VARS.GIT_BRANCH
-            if(COMMIT_MESSAGE.startsWith("[maven-release-plugin]")) {
+            /*if(COMMIT_MESSAGE.startsWith("[maven-release-plugin]")) {
                 currentBuild.result = 'SUCCESS'
                 echo "Commit message starts with maven-release-plugin. Exiting..."
                 sh "exit ./build.sh 0" 
-            }
+            }*/
         }
         
         env.BRANCH_NAME = get_branch_name(env.BRANCH_NAME);
