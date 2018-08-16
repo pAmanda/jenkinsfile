@@ -55,9 +55,9 @@ def call(body) {
                         echo "===================================================="
                         echo "Analyse Stage"
                         echo "===================================================="
-                        withSonarQubeEnv('sonar') {
-                            sh "mvn sonar:sonar"
-                        }
+                        //withSonarQubeEnv('Sonar') {
+                            sh "mvn sonar:sonar -Dsonar.host.url=" + env.SONAR_URL + " -Dsonar.login=" + env.SONAR_USER + " -Dsonar.password=" + env.SONAR_PASS
+                       // }
                     }
                 }
                 stage('Quality Gate') {
