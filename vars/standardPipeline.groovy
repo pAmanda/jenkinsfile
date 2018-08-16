@@ -55,7 +55,7 @@ def call(body) {
                         echo "===================================================="
                         echo "Analyse Stage"
                         echo "===================================================="
-                        withSonarQubeEnv('sonar') {
+                        withSonarQubeEnv('Sonar') {
                             sh "mvn sonar:sonar"
                        }
                     }
