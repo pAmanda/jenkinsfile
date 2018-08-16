@@ -56,7 +56,7 @@ def call(body) {
                         echo "Analyse Stage"
                         echo "===================================================="
                         //withSonarQubeEnv('Sonar') {
-                            sh "mvn sonar:sonar -Dsonar.host.url=" + env.SONAR_URL + " -Dsonar.login=" + env.SONAR_USER + " -Dsonar.password=" + env.SONAR_PASS
+                            sh "mvn sonar:sonar"
                        // }
                     }
                 }
