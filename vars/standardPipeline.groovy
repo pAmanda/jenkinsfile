@@ -87,7 +87,7 @@ def call(body) {
                             echo "===================================================="
                             echo "Release Stage"
                             echo "===================================================="
-                            sh 'mvn -B release:prepare -DreleaseVersion=${VERSION} -DdevelopmentVersion=${NEXT_VERSION}'
+                            //sh 'mvn -B release:prepare -DreleaseVersion=${VERSION} -DdevelopmentVersion=${NEXT_VERSION}'
                         }
                     }
                 }
