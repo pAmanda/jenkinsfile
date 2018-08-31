@@ -10,8 +10,8 @@ def call(body) {
         
         // Exporting Docker env variables
         // Change this variables
-        env.DOCKER_HOST="tcp://192.168.99.100:2376"
-        env.DOCKER_CERT_PATH="/Users/" + env.USER + "/.docker/machine/machines/default"
+        // env.DOCKER_HOST="tcp://192.168.99.100:2376"
+        // env.DOCKER_CERT_PATH="/Users/" + env.USER + "/.docker/machine/machines/default"
         env.PATH = "${tool 'Maven3'}/bin:${env.PATH}"
         env.PATH = "${tool 'jdk1.8'}/bin:${env.PATH}"
         
