@@ -34,7 +34,7 @@ def call(body) {
                             echo "Docker Stage"
                             echo "===================================================="
                             openshift.withCluster('openshift-pocose', 'eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJrdWJlcm5ldGVzL3NlcnZpY2VhY2NvdW50Iiwia3ViZXJuZXRlcy5pby9zZXJ2aWNlYWNjb3VudC9uYW1lc3BhY2UiOiJzaXBwZSIsImt1YmVybmV0ZXMuaW8vc2VydmljZWFjY291bnQvc2VjcmV0Lm5hbWUiOiJqZW5raW5zLXRva2VuLWNxeHJ0Iiwia3ViZXJuZXRlcy5pby9zZXJ2aWNlYWNjb3VudC9zZXJ2aWNlLWFjY291bnQubmFtZSI6ImplbmtpbnMiLCJrdWJlcm5ldGVzLmlvL3NlcnZpY2VhY2NvdW50L3NlcnZpY2UtYWNjb3VudC51aWQiOiI2ZmJlNWY0Yy1hN2VkLTExZTgtYmFmYS1hYWQ5ZGI0NzZhMzciLCJzdWIiOiJzeXN0ZW06c2VydmljZWFjY291bnQ6c2lwcGU6amVua2lucyJ9.Z3dFK3IQ3yoTQsyZYfPT0RDvwHmG4pm9BNBBkKdVYOHAwkuULfMzCuGC5vZ9uPDFXFsdcdg2nBMlj66nnhKKaxFeEdoJOf5eyRM0VK1rF0VL9b3fwtd8-UgmvjISgWO8Eous1Gr3uAUkOnw9HA3ioD5CBsz9JIMLhIG7bR0zkPoXcd16gw_Q3RSL_5BMnuFXLIroQtmjfVDjKzZwHK6Q_dcVCXdQMHLpd-yx76ahOiQdRjWmxZ4CxGTr9y8ccCRcECw3TWLcN32bSY3Z5xRVeESXEbBaWeJaeBuJUOfTyMdbJuvagj0xJMrmjsRU1RCAF2nKXYUzzq7lo7u3qulAMg') {
-                                sh "mvn package docker:build docker push"
+                                sh "mvn package docker:build docker:push"
                             }
                             // sh "mvn package docker:build docker:push"
                         }
