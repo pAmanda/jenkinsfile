@@ -1,8 +1,8 @@
 def call(body) {
 
     properties([
-        durabilityHint('PERFORMANCE_OPTIMIZED')
-        buildDiscarder(logRotator(numToKeepStr: '3'))
+        durabilityHint('PERFORMANCE_OPTIMIZED'),
+        buildDiscarder(logRotator(numToKeepStr: '3')),
         pollSCM('* * * * * ') 
     ])
 
