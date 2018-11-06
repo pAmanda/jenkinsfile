@@ -6,6 +6,8 @@ def call(body) {
 
     println VERSION
 
+    println body
+
     node {
         // Clean workspace before doing anything        
         deleteDir()
