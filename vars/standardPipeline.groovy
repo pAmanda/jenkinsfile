@@ -4,7 +4,7 @@ def call(body) {
         durabilityHint('PERFORMANCE_OPTIMIZED')
     ])
 
-    println VARS.VERSION
+    println VERSION
 
     node {
         // Clean workspace before doing anything        
@@ -29,7 +29,7 @@ def call(body) {
         } else {
             env.BRANCH_NAME = (env.BRANCH_NAME == '' || env.BRANCH_NAME == null) ?  get_branch_name(VARS.GIT_BRANCH) : get_branch_name(env.BRANCH_NAME) 
             try {
- stage('Checkout') {
+                stage('Checkout') {
                     echo "===================================================="
                     echo "Checkout Stage"
                     echo "===================================================="
