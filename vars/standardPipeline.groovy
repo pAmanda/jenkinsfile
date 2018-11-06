@@ -2,14 +2,10 @@ def call(body) {
 
     properties([
         durabilityHint('PERFORMANCE_OPTIMIZED')
-    ])
-        options { 
-        buildDiscarder(logRotator(numToKeepStr: '3')) 
-    }
-    triggers { 
+        buildDiscarder(logRotator(numToKeepStr: '3'))
         pollSCM('* * * * * ') 
-    }
-    
+    ])
+
     node {
         // Clean workspace before doing anything        
         deleteDir()
