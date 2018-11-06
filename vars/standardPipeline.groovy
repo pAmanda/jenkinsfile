@@ -6,12 +6,12 @@ def call(body) {
 
     env.PATH = "${tool 'Maven3'}/bin:${tool 'jdk1.8'}/bin:${env.PATH}"
 
-    deleteDir()
-
-
+    
 
     node {
-        // Clean workspace before doing anything        
+        // Clean workspace before doing anything     
+        deleteDir()
+   
         def VARS = checkout scm
         def COMMIT_MESSAGE = sh (script: 'git log -1 --pretty=%B',returnStdout: true).trim()
         
