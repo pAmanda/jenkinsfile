@@ -4,7 +4,7 @@ def call(body) {
         durabilityHint('PERFORMANCE_OPTIMIZED')
     ])
 
-    println VERSION
+    println VARS.VERSION
 
     node {
         // Clean workspace before doing anything        
