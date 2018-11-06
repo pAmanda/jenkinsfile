@@ -3,9 +3,6 @@ def call(body) {
     properties([
         durabilityHint('PERFORMANCE_OPTIMIZED')
     ])
-
-    env.PATH = "${tool 'Maven3'}/bin:${tool 'jdk1.8'}/bin:${env.PATH}"
-
     
 
     node {
@@ -14,6 +11,9 @@ def call(body) {
    
         def VARS = checkout scm
         def COMMIT_MESSAGE = sh (script: 'git log -1 --pretty=%B',returnStdout: true).trim()
+
+        env.PATH = "${tool 'Maven3'}/bin:${tool 'jdk1.8'}/bin:${env.PATH}"
+
         
         // Exporting Docker env variables
         // Change this variables
