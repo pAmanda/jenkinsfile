@@ -1,24 +1,25 @@
 def call(body) {
 
     properties([
-        durabilityHint('PERFORMANCE_OPTIMIZED'),
-        buildDiscarder(logRotator(numToKeepStr: '3')),
-        pollSCM('* * * * * ') 
+        durabilityHint('PERFORMANCE_OPTIMIZED')
     ])
+
+    env.PATH = "${tool 'Maven3'}/bin:${tool 'jdk1.8'}/bin:${env.PATH}"
+
+    deleteDir()
+            
+    def VARS = checkout scm
+    def COMMIT_MESSAGE = sh (script: 'git log -1 --pretty=%B',returnStdout: true).trim()
 
     node {
         // Clean workspace before doing anything        
-        deleteDir()
+      
         
         // Exporting Docker env variables
         // Change this variables
         // env.DOCKER_HOST="tcp://192.168.99.100:2376"
         // env.DOCKER_CERT_PATH="/Users/" + env.USER + "/.docker/machine/machines/default"
-        env.PATH = "${tool 'Maven3'}/bin:${env.PATH}"
-        env.PATH = "${tool 'jdk1.8'}/bin:${env.PATH}"
-        
-        def VARS = checkout scm
-        def COMMIT_MESSAGE = sh (script: 'git log -1 --pretty=%B',returnStdout: true).trim()
+
         
         if (COMMIT_MESSAGE.startsWith("[maven-release-plugin]") 
             && (env.BRANCH_NAME == '' || env.BRANCH_NAME == null)) {
