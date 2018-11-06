@@ -7,13 +7,13 @@ def call(body) {
     env.PATH = "${tool 'Maven3'}/bin:${tool 'jdk1.8'}/bin:${env.PATH}"
 
     deleteDir()
-            
-    def VARS = checkout scm
-    def COMMIT_MESSAGE = sh (script: 'git log -1 --pretty=%B',returnStdout: true).trim()
+
+
 
     node {
         // Clean workspace before doing anything        
-      
+        def VARS = checkout scm
+        def COMMIT_MESSAGE = sh (script: 'git log -1 --pretty=%B',returnStdout: true).trim()
         
         // Exporting Docker env variables
         // Change this variables
