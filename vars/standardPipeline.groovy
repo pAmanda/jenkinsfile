@@ -11,7 +11,7 @@ def call(body) {
                 stage('Checkout') {
                     steps {
                         echo "Olá!"
-                        echo $GIT_BRANCH
+                        echo GIT_BRANCH
                     }
                 }
             }
