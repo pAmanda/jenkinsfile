@@ -13,6 +13,7 @@ def call(body) {
                         echo "Olá!"
                         echo GIT_BRANCH
                         echo TEST
+                        println TEST.getClass()
                     }
                 }
             }
