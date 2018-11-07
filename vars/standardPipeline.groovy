@@ -1,10 +1,10 @@
 def call(body) {
 
-    properties([
-        durabilityHint('PERFORMANCE_OPTIMIZED')
-    ])
+    // properties([
+    //     durabilityHint('PERFORMANCE_OPTIMIZED')
+    // ])
 
-    if(TEST) {
+    if(TEST == true) {
         pipeline { 
             agent any
             stages {
