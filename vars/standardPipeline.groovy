@@ -16,6 +16,7 @@ def call(body) {
     }
 
     //BRANCH_NAME = (BRANCH_NAME == '' || BRANCH_NAME == null) ?  get_branch_name(GIT_BRANCH) : get_branch_name(BRANCH_NAME) 
+    println GIT_BRANCH
     
     if(Test == 'true') {
         pipeline { 
