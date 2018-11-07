@@ -25,6 +25,7 @@ def call(body) {
                     steps {
                         echo "Olá!"
                         echo PRODUCTION
+                        echo TEST
                     }
                 }
             }            
