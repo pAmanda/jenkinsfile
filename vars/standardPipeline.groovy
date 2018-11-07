@@ -11,10 +11,12 @@ def call(body) {
         }     
     }
 
-    if(Test == Production) {
+    if(TEST == PRODUCTION) {
         throw new Exception('Tipos de ambiente para deploy não podem ter o mesmo valor.')
     }
 
+    BRANCH_NAME = (BRANCH_NAME == '' || BRANCH_NAME == null) ?  get_branch_name(GIT_BRANCH) : get_branch_name(BRANCH_NAME) 
+    
     if(Test == 'true') {
         pipeline { 
             agent any
@@ -24,8 +26,7 @@ def call(body) {
                         echo 'Olá!'
                         echo GIT_BRANCH
                         echo Test
-                        echo Branch_Name
-                        println TEST.getClass()
+                        echo BRANCH_NAME
                     }
                 }
             }
