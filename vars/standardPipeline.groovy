@@ -15,7 +15,7 @@ def call(body) {
         throw new Exception('Tipos de ambiente para deploy não podem ter o mesmo valor.')
     }
 
-    BRANCH_NAME = (BRANCH_NAME == '' || BRANCH_NAME == null) ?  get_branch_name(GIT_BRANCH) : get_branch_name(BRANCH_NAME) 
+    //BRANCH_NAME = (BRANCH_NAME == '' || BRANCH_NAME == null) ?  get_branch_name(GIT_BRANCH) : get_branch_name(BRANCH_NAME) 
     
     if(Test == 'true') {
         pipeline { 
