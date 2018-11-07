@@ -4,7 +4,7 @@ def call(body) {
     //     durabilityHint('PERFORMANCE_OPTIMIZED')
     // ])
 
-    if(TEST == true) {
+    if(TEST) {
         pipeline { 
             agent any
             stages {
