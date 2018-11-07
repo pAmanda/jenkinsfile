@@ -22,7 +22,9 @@ def call(body) {
             stages {
                 stage('Checkout') {
                     steps {
-                        BRANCH_NAME = (BRANCH_NAME == '' || BRANCH_NAME == null) ?  get_branch_name(GIT_BRANCH) : get_branch_name(BRANCH_NAME) 
+                        script {
+                            BRANCH_NAME = (BRANCH_NAME == '' || BRANCH_NAME == null) ?  get_branch_name(GIT_BRANCH) : get_branch_name(BRANCH_NAME) 
+                        }
                         echo 'Olá!'
                         echo GIT_BRANCH
                         echo Test
