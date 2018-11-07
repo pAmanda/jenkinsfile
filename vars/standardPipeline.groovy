@@ -11,6 +11,7 @@ def call(body) {
                 stage('Checkout') {
                     steps {
                         echo "Olá!"
+                        echo VARS.GIT_BRANCH
                     }
                 }
             }
