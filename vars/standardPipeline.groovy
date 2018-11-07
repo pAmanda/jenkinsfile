@@ -4,6 +4,10 @@ def call(body) {
     //     durabilityHint('PERFORMANCE_OPTIMIZED')
     // ])
 
+    if(TEST == PRODUCTION) {
+        throw new Exception('Preencha corretamente o tipo de ambiente para deploy.')
+    }
+
     if(TEST == 'true') {
         pipeline { 
             agent any
