@@ -4,13 +4,13 @@ def call(body) {
     //     durabilityHint('PERFORMANCE_OPTIMIZED')
     // ])
 
-    if(TEST) {
+    if(TEST == 'true') {
         pipeline { 
             agent any
             stages {
                 stage('Checkout') {
                     steps {
-                        echo "Olá!"
+                        echo 'Olá!'
                         echo GIT_BRANCH
                         echo TEST
                         println TEST.getClass()
