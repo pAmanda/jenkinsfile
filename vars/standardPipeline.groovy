@@ -12,6 +12,7 @@ def call(body) {
                     steps {
                         echo "Olá!"
                         echo GIT_BRANCH
+                        echo TEST
                     }
                 }
             }
