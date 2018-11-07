@@ -4,7 +4,7 @@ def call(body) {
         durabilityHint('PERFORMANCE_OPTIMIZED')
     ])
 
-    if(TEST == true) {
+    if(TEST) {
         pipeline { 
             agent any
             stages {
@@ -12,7 +12,7 @@ def call(body) {
                     steps {
                         echo "Olá!"
                         echo GIT_BRANCH
-                        echo Test
+                        echo TEST
                     }
                 }
             }
