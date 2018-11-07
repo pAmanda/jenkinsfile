@@ -3,114 +3,30 @@ def call(body) {
     properties([
         durabilityHint('PERFORMANCE_OPTIMIZED')
     ])
-    
 
-    node {
-        // Clean workspace before doing anything     
-        deleteDir()
-   
-        def VARS = checkout scm
-        def COMMIT_MESSAGE = sh (script: 'git log -1 --pretty=%B',returnStdout: true).trim()
-
-        env.PATH = "${tool 'Maven3'}/bin:${tool 'jdk1.8'}/bin:${env.PATH}"
-
-        
-        // Exporting Docker env variables
-        // Change this variables
-        // env.DOCKER_HOST="tcp://192.168.99.100:2376"
-        // env.DOCKER_CERT_PATH="/Users/" + env.USER + "/.docker/machine/machines/default"
-
-        
-        if (COMMIT_MESSAGE.startsWith("[maven-release-plugin]") 
-            && (env.BRANCH_NAME == '' || env.BRANCH_NAME == null)) {
-            
-            currentBuild.result = 'SUCCESS'
-            echo "Commit message starts with maven-release-plugin. Exiting..."
-            
-        } else {
-            env.BRANCH_NAME = (env.BRANCH_NAME == '' || env.BRANCH_NAME == null) ?  get_branch_name(VARS.GIT_BRANCH) : get_branch_name(env.BRANCH_NAME) 
-            try {
+    if(test) {
+        pipeline { 
+            agent any
+            stages {
                 stage('Checkout') {
-                    echo "===================================================="
-                    echo "Checkout Stage"
-                    echo "===================================================="
-                    echo "branch name = " + env.BRANCH_NAME
-                    echo "parameters = " + VERSION + " e " + NEXT_VERSION
-                    sh 'git checkout '+ env.BRANCH_NAME
-                }
-                stage('Build') {
-                    echo "===================================================="
-                    echo "Build Stage"
-                    echo "===================================================="
-                    sh "mvn clean install -Dmaven.test.skip=true -Dmaven.javadoc.skip=true"
-                }
-                stage('Test') {
-                    if(!branch_is_feature()) {
-                        echo "===================================================="
-                        echo "Test Stage"
-                        echo "===================================================="
-                        sh "mvn test"
+                    step {
+                        echo "Olá!"
                     }
                 }
-                stage ('Analyse') {
-                    if(!branch_is_feature()) {
-                        echo "===================================================="
-                        echo "Analyse Stage"
-                        echo "===================================================="
-                        withSonarQubeEnv('Sonar') {                          
-                            sh "mvn sonar:sonar"
-
-                        }
-                    }
-                }
-                stage('Quality Gate') {
-                     if(!branch_is_feature()) {
-                        // echo "===================================================="
-                        // echo "Quality Gate Stage"
-                        // echo "===================================================="
-			            // timeout(time: 1, unit: 'HOURS') {
-                    	//    def qg = waitForQualityGate()
-			            //     if (qg.status != 'OK') {
-		                //       error "Pipeline aborted due to quality gate failure: ${qg.status}"
-    			        //     } 
-		                // }
-                    }
-                }
-                stage('Archive') {
-                    if(branch_is_master() || branch_is_hotfix()) {
-                        echo "===================================================="
-                        echo "Archive Stage"
-                        echo "===================================================="
-                        sh 'mvn deploy -Dmaven.test.skip=true'
-                    }
-                }
-                stage ('Release') {
-                    if(VERSION != NEXT_VERSION) {
-                        if(branch_is_master() || branch_is_hotfix()) {
-                            echo "===================================================="
-                            echo "Release Stage"
-                            echo "===================================================="
-                            sh 'mvn -B release:prepare -DreleaseVersion=${VERSION} -DdevelopmentVersion=${NEXT_VERSION}'
-                        }
-                    }
-                }
-                stage('Docker') {
-                    if(VERSION != NEXT_VERSION) {
-                        if(branch_is_master() || branch_is_hotfix()) {
-                            echo "===================================================="
-                            echo "Docker Stage"
-                            echo "===================================================="
-                            echo "Fazendo checkout na tag gerada"
-                            sh 'git checkout $(git describe --tags $(git rev-list --tags --max-count=1))'
-                            echo "===================================================="
-                        }
-                    }
-                }
-            } catch (error) {
-                currentBuild.result = 'FAILED'
-                throw error
-            }   
+            }
         }
+    } else {
+        pipeline {
+            agent any
+            stages {
+                stage('Deploy') {
+                    step {
+                        echo "Olá!"
+                    }
+                }
+            }            
+        }
+
     }
 }
 
