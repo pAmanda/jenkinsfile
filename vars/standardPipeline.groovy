@@ -3,6 +3,7 @@ def call(body) {
     // properties([
     //     durabilityHint('PERFORMANCE_OPTIMIZED')
     // ])
+
     node {
         def commit_message = sh (script: 'git log -1 --pretty=%B',returnStdout: true).trim()
         if (commit_message.startsWith("[maven-release-plugin]")) {    
@@ -15,17 +16,13 @@ def call(body) {
         throw new Exception('Tipos de ambiente para deploy não podem ter o mesmo valor.')
     }
 
-    BRANCH_NAME = (BRANCH_NAME == '' || BRANCH_NAME == null) ?  get_branch_name(GIT_BRANCH) : get_branch_name(BRANCH_NAME) 
-
     if(Test == 'true') {
         pipeline { 
             agent any
             stages {
                 stage('Checkout') {
                     steps {
-                        script {
-                            BRANCH_NAME = (BRANCH_NAME == '' || BRANCH_NAME == null) ?  get_branch_name(GIT_BRANCH) : get_branch_name(BRANCH_NAME) 
-                        }
+                        BRANCH_NAME = (BRANCH_NAME == '' || BRANCH_NAME == null) ?  get_branch_name(GIT_BRANCH) : get_branch_name(BRANCH_NAME) 
                         echo 'Olá!'
                         echo GIT_BRANCH
                         echo Test
