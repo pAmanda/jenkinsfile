@@ -24,7 +24,7 @@ def call(body) {
                         echo 'Olá!'
                         echo GIT_BRANCH
                         echo Test
-                        echo ${Branch Name}
+                        echo Branch_Name
                         println TEST.getClass()
                     }
                 }
