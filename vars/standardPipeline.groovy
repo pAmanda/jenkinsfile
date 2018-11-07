@@ -17,8 +17,7 @@ def call(body) {
                 }
             }
         }
-    } 
-    if(PRODUCTION){
+    } else {
         pipeline {
             agent any
             stages {
