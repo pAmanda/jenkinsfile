@@ -4,11 +4,18 @@ def call(body) {
     //     durabilityHint('PERFORMANCE_OPTIMIZED')
     // ])
 
-    if(TEST == PRODUCTION) {
-        throw new Exception('Preencha corretamente o tipo de ambiente para deploy.')
+    def commit_message = sh (script: 'git log -1 --pretty=%B',returnStdout: true).trim()
+
+    if (commit_message.startsWith("[maven-release-plugin]")) {    
+        currentBuild.result = 'SUCCESS'
+        echo "Commit message starts with maven-release-plugin. Exiting..."   
+    }    
+
+    if(Test == Production) {
+        throw new Exception('Tipos de ambiente para deploy não podem ter o mesmo valor.')
     }
 
-    if(TEST == 'true') {
+    if(Test == 'true') {
         pipeline { 
             agent any
             stages {
@@ -16,7 +23,7 @@ def call(body) {
                     steps {
                         echo 'Olá!'
                         echo GIT_BRANCH
-                        echo TEST
+                        echo Test
                         println TEST.getClass()
                     }
                 }
@@ -29,8 +36,8 @@ def call(body) {
                 stage('Deploy') {
                     steps {
                         echo "Olá!"
-                        echo PRODUCTION
-                        echo TEST
+                        echo Production
+                        echo Test
                     }
                 }
             }            
