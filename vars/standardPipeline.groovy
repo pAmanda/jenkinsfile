@@ -9,7 +9,7 @@ def call(body) {
             agent any
             stages {
                 stage('Checkout') {
-                    step {
+                    steps {
                         echo "Olá!"
                     }
                 }
@@ -20,7 +20,7 @@ def call(body) {
             agent any
             stages {
                 stage('Deploy') {
-                    step {
+                    steps {
                         echo "Olá!"
                     }
                 }
