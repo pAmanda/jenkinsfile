@@ -20,13 +20,13 @@ def call(body) {
     if(Test == 'true') {
         pipeline { 
             agent any
-            BRANCH_NAME = (BRANCH_NAME == '' || BRANCH_NAME == null) ?  get_branch_name(GIT_BRANCH) : get_branch_name(BRANCH_NAME) 
             stages {
                 stage('Checkout') {
                     steps {
                         echo 'Olá!'
                         echo GIT_BRANCH
                         echo Test
+                        BRANCH_NAME = (BRANCH_NAME == '' || BRANCH_NAME == null) ?  get_branch_name(GIT_BRANCH) : get_branch_name(BRANCH_NAME) 
                         echo BRANCH_NAME
                     }
                 }
