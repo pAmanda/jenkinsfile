@@ -3,13 +3,13 @@ def call(body) {
     // properties([
     //     durabilityHint('PERFORMANCE_OPTIMIZED')
     // ])
-
-    def commit_message = sh (script: 'git log -1 --pretty=%B',returnStdout: true).trim()
-
-    if (commit_message.startsWith("[maven-release-plugin]")) {    
-        currentBuild.result = 'SUCCESS'
-        echo "Commit message starts with maven-release-plugin. Exiting..."   
-    }    
+    node {
+        def commit_message = sh (script: 'git log -1 --pretty=%B',returnStdout: true).trim()
+        if (commit_message.startsWith("[maven-release-plugin]")) {    
+            currentBuild.result = 'SUCCESS'
+            echo "Commit message starts with maven-release-plugin. Exiting..."   
+        }     
+    }
 
     if(Test == Production) {
         throw new Exception('Tipos de ambiente para deploy não podem ter o mesmo valor.')
