@@ -17,13 +17,15 @@ def call(body) {
                 }
             }
         }
-    } else {
+    } 
+    if(PRODUCTION){
         pipeline {
             agent any
             stages {
                 stage('Deploy') {
                     steps {
                         echo "Olá!"
+                        echo PRODUCTION
                     }
                 }
             }            
