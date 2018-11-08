@@ -4,115 +4,64 @@ def call(body) {
     //     durabilityHint('PERFORMANCE_OPTIMIZED')
     // ])
 
-    def commit_message
+    def nothing = (ENVIRONMENT == "" || ENVIRONMENT == null) : true ? false
+    def commit_message = null
     node {
         commit_message = sh (script: 'git log -1 --pretty=%B',returnStdout: true).trim()   
     }
-
     if (commit_message.startsWith("[maven-release-plugin]")) {    
         currentBuild.result = 'SUCCESS'
         echo "Commit message starts with maven-release-plugin. Exiting..."   
-    } else {
-        ENVIRONMENT = ENVIRONMENT.trim()
-        switch(ENVIRONMENT) {
-            case "Homologation":
-                pipeline { 
-                    agent any
-                    stages {
-                        stage('Checkout') {
-                            steps {
-                                echo "===================================================="
-                                echo "Checkout Stage"
-                                echo "===================================================="
-                                // script {
-                                //     BRANCH_NAME = (BRANCH_NAME == '' || BRANCH_NAME == null) ?  get_branch_name(GIT_BRANCH) : get_branch_name(BRANCH_NAME) 
-                                // }
-                                // echo "BRANCH_NAME = " + BRANCH_NAME
-                                // echo "PARAMETERS = VERSION: " + VERSION + " e NEXT_VERSION: " + NEXT_VERSION
-                                // sh 'git checkout ' + BRANCH_NAME
-                            }
+
+    } else if(ENVIRONMENT == 'Homologation' || nothing) {
+        pipeline { 
+            agent any
+            stages {
+                stage('Checkout') {
+                    steps {
+                        echo "===================================================="
+                        echo "Checkout Stage"
+                        echo "===================================================="
+                        script {
+                            BRANCH_NAME = (BRANCH_NAME == '' || BRANCH_NAME == null) ?  get_branch_name(GIT_BRANCH) : get_branch_name(BRANCH_NAME) 
                         }
-                        // stage('Build') {
-                        //     steps {
-                        //         echo "===================================================="
-                        //         echo "Build Stage"
-                        //         echo "===================================================="
-                        //         sh "mvn clean install -Dmaven.test.skip=true -Dmaven.javadoc.skip=true"
-                        //     }
-                        // }
-                        // stage('Test') { 
-                        //     steps {                        
-                        //         echo "===================================================="
-                        //         echo "Test Stage"
-                        //         echo "===================================================="
-                        //         sh "mvn test"
-                        //     }
-                        // }
+                        echo "BRANCH_NAME = " + BRANCH_NAME
+                        echo "PARAMETERS = VERSION: " + VERSION + " e NEXT_VERSION: " + NEXT_VERSION
+                        sh 'git checkout ' + BRANCH_NAME
                     }
-                }                
-                break
-            case "Production":
-                // production_environment()
-                break
-            default:
-                // default_environment()
-                break
-        }
-    }
-}
-
-def default_environment() {
-    pipeline { 
-        agent any
-        stages {
-            stage('Checkout') {
-                steps {
-                    echo "===================================================="
-                    echo "Checkout Stage"
-                    echo "===================================================="
-                    // script {
-                    //     BRANCH_NAME = (BRANCH_NAME == '' || BRANCH_NAME == null) ?  get_branch_name(GIT_BRANCH) : get_branch_name(BRANCH_NAME) 
-                    // }
-                    // echo "BRANCH_NAME = " + BRANCH_NAME
-                    // echo "PARAMETERS = VERSION: " + VERSION + " e NEXT_VERSION: " + NEXT_VERSION
-                    // sh 'git checkout ' + BRANCH_NAME
+                }
+                stage('Build') {
+                    steps {
+                        echo "===================================================="
+                        echo "Build Stage"
+                        echo "===================================================="
+                        sh "mvn clean install -Dmaven.test.skip=true -Dmaven.javadoc.skip=true"
+                    }
+                }
+                stage('Test') { 
+                    steps {                        
+                        echo "===================================================="
+                        echo "Test Stage"
+                        echo "===================================================="
+                        sh "mvn test"
+                    }
                 }
             }
-            // stage('Build') {
-            //     steps {
-            //         echo "===================================================="
-            //         echo "Build Stage"
-            //         echo "===================================================="
-            //         sh "mvn clean install -Dmaven.test.skip=true -Dmaven.javadoc.skip=true"
-            //     }
-            // }
-            // stage('Test') { 
-            //     steps {                        
-            //         echo "===================================================="
-            //         echo "Test Stage"
-            //         echo "===================================================="
-            //         sh "mvn test"
-            //     }
-            // }
+        }
+    } else {
+        pipeline {
+            agent any
+            stages {
+                stage('Deploy') {
+                    steps {
+                        echo "Olá!"
+                    }
+                }
+            }  
         }
     }
-}
-
-def production_environment() {
-    pipeline {
-        agent any
-        stages {
-            stage('Deploy') {
-                steps {
-                    echo "Olá!"
-                    echo Production
-                    echo Test
-                }
-            }
-        }            
-    }
-}
-
+} 
+    
 def String get_branch_name(branch_name) {
     return branch_name.replaceAll("origin/", "").trim();
 }
@@ -134,5 +83,5 @@ def Boolean branch_is_hotfix() {
 }
 
 def Boolean test_branch_name(branch) {
-    return env.BRANCH_NAME.startsWith(branch)
+    return BRANCH_NAME.startsWith(branch)
 }
