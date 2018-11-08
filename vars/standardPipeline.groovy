@@ -4,6 +4,7 @@ def call(body) {
     //     durabilityHint('PERFORMANCE_OPTIMIZED')
     // ])
 
+    ENVIRONMENT = ENVIRONMENT.trim()
     def nothing = (ENVIRONMENT == "" || ENVIRONMENT == null) ? true : false
     def commit_message = null
     node {
