@@ -15,7 +15,7 @@ def call(body) {
         currentBuild.result = 'SUCCESS'
         echo "Commit message starts with maven-release-plugin. Exiting..."   
 
-    } else if(ENVIRONMENT == 'Homologation' || nothing) {
+    } else if(ENVIRONMENT == 'Staging' || nothing) {
         pipeline { 
             agent any
             tools {
@@ -160,7 +160,7 @@ def call(body) {
                             echo "Docker Stage"
                             echo "===================================================="
                             echo "Fazendo checkout na tag gerada"
-                            sh 'git checkout $(git describe --tags $(git rev-list --tags --max-count=1))'
+                            sh 'git checkout ' + TAG_NAME
                             echo "===================================================="
                         }
                     }
