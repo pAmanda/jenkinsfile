@@ -16,7 +16,40 @@ def call(body) {
         ENVIRONMENT = ENVIRONMENT.trim()
         switch(ENVIRONMENT) {
             case "Homologation":
-                default_environment()
+                pipeline { 
+                    agent any
+                    stages {
+                        stage('Checkout') {
+                            steps {
+                                echo "===================================================="
+                                echo "Checkout Stage"
+                                echo "===================================================="
+                                // script {
+                                //     BRANCH_NAME = (BRANCH_NAME == '' || BRANCH_NAME == null) ?  get_branch_name(GIT_BRANCH) : get_branch_name(BRANCH_NAME) 
+                                // }
+                                // echo "BRANCH_NAME = " + BRANCH_NAME
+                                // echo "PARAMETERS = VERSION: " + VERSION + " e NEXT_VERSION: " + NEXT_VERSION
+                                // sh 'git checkout ' + BRANCH_NAME
+                            }
+                        }
+                        // stage('Build') {
+                        //     steps {
+                        //         echo "===================================================="
+                        //         echo "Build Stage"
+                        //         echo "===================================================="
+                        //         sh "mvn clean install -Dmaven.test.skip=true -Dmaven.javadoc.skip=true"
+                        //     }
+                        // }
+                        // stage('Test') { 
+                        //     steps {                        
+                        //         echo "===================================================="
+                        //         echo "Test Stage"
+                        //         echo "===================================================="
+                        //         sh "mvn test"
+                        //     }
+                        // }
+                    }
+                }                
                 break
             case "Production":
                 // production_environment()
