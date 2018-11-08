@@ -4,7 +4,7 @@ def call(body) {
     //     durabilityHint('PERFORMANCE_OPTIMIZED')
     // ])
 
-    def nothing = (ENVIRONMENT == "" || ENVIRONMENT == null) : true ? false
+    def nothing = (ENVIRONMENT == "" || ENVIRONMENT == null) ? true : false
     def commit_message = null
     node {
         commit_message = sh (script: 'git log -1 --pretty=%B',returnStdout: true).trim()   
