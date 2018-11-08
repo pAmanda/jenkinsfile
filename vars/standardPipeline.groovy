@@ -14,20 +14,19 @@ def call(body) {
     if (commit_message.startsWith("[maven-release-plugin]")) {    
         currentBuild.result = 'SUCCESS'
         echo "Commit message starts with maven-release-plugin. Exiting..."   
-    } 
-    // else {
-    //     switch(ENVIRONMENT) {
-    //         case 'Homologation':
-    //             default_environment()
-    //             break
-    //         case 'Production':
-    //             production_environment()
-    //             break
-    //         default:
-    //             default_environment()
-    //             break
-    //     }
-    // }
+    } else {
+        switch(ENVIRONMENT) {
+            case 'Homologation':
+                // default_environment()
+                echo "OK"
+                break
+            case 'Production':
+                // production_environment()
+                break
+            default:
+                // default_environment()
+        }
+    }
 }
 
 def void default_environment() {
