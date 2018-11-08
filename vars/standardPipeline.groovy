@@ -22,14 +22,22 @@ def call(body) {
             stages {
                 stage('Checkout') {
                     steps {
+                        echo "===================================================="
+                        echo "Checkout Stage"
+                        echo "===================================================="
                         script {
                             BRANCH_NAME = (BRANCH_NAME == '' || BRANCH_NAME == null) ?  get_branch_name(GIT_BRANCH) : get_branch_name(BRANCH_NAME) 
                         }
-                        echo 'Olá!'
-                        echo GIT_BRANCH
-                        echo Test
-                        echo BRANCH_NAME
+                        echo "BRANCH_NAME =" + BRANCH_NAME
+                        echo "PARAMETERS = VERSION: " + VERSION + " e NEXT_VERSION: " + NEXT_VERSION
+                        sh 'git checkout ' + BRANCH_NAME
                     }
+                }
+                stage('Build') {
+                    echo "===================================================="
+                    echo "Build Stage"
+                    echo "===================================================="
+
                 }
             }
         }
