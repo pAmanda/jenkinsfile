@@ -39,7 +39,14 @@ def call(body) {
                         sh "mvn clean install -Dmaven.test.skip=true -Dmaven.javadoc.skip=true"
                     }
                 }
-                stage('Test') { 
+                stage('Test') {
+                    when {
+                        not {
+                            expression {
+                               branch_is_feature() 
+                            } 
+                        } 
+                    } 
                     steps {                        
                         echo "===================================================="
                         echo "Test Stage"
