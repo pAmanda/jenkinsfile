@@ -9,7 +9,6 @@ def call(body) {
     def commit_message = null
     node {
         deleteDir()
-        //def VARS = checkout scm
         commit_message = sh (script: 'git log -1 --pretty=%B',returnStdout: true).trim()   
     }
     if (commit_message.startsWith("[maven-release-plugin]")) {    
@@ -149,6 +148,26 @@ def call(body) {
                             echo 'TAG_NAME = ' + TAG_NAME
                             sh 'git checkout ' + TAG_NAME
                         }
+                    }
+                    stage('Docker') {
+                        when {
+                            expression {
+                                branch_is_master_hotfix() && different_versions()
+                            } 
+                        }
+                        steps {
+                            echo "===================================================="
+                            echo "Docker Stage"
+                            echo "===================================================="
+                            echo "Fazendo checkout na tag gerada"
+                            sh 'git checkout $(git describe --tags $(git rev-list --tags --max-count=1))'
+                            echo "===================================================="
+                        }
+                    }
+                }
+                post { 
+                    always { 
+                        deleteDir()
                     }
                 }  
             }
