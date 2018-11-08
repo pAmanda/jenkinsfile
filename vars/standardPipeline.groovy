@@ -9,7 +9,7 @@ def call(body) {
     def commit_message = null
     node {
         deleteDir()
-        def VARS = checkout scm
+        //def VARS = checkout scm
         commit_message = sh (script: 'git log -1 --pretty=%B',returnStdout: true).trim()   
     }
     if (commit_message.startsWith("[maven-release-plugin]")) {    
