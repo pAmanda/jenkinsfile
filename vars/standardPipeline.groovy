@@ -4,13 +4,14 @@ def call(body) {
     //     durabilityHint('PERFORMANCE_OPTIMIZED')
     // ])
 
+    def commit_message = null
     node {
-        def commit_message = sh (script: 'git log -1 --pretty=%B',returnStdout: true).trim()
-        if (commit_message.startsWith("[maven-release-plugin]")) {    
-            currentBuild.result = 'SUCCESS'
-            echo "Commit message starts with maven-release-plugin. Exiting..."   
-        }     
+        commit_message = sh (script: 'git log -1 --pretty=%B',returnStdout: true).trim()   
     }
+    if (commit_message.startsWith("[maven-release-plugin]")) {    
+        currentBuild.result = 'SUCCESS'
+        echo "Commit message starts with maven-release-plugin. Exiting..."   
+    } 
 
     if(TEST == PRODUCTION) {
         throw new Exception('Tipos de ambiente para deploy não podem ter o mesmo valor.')
@@ -40,6 +41,9 @@ def call(body) {
                         echo "===================================================="
                         sh "mvn clean install -Dmaven.test.skip=true -Dmaven.javadoc.skip=true"
                     }
+                }
+                stage('Test') { 
+
                 }
             }
         }
@@ -81,5 +85,5 @@ def Boolean branch_is_hotfix() {
 }
 
 def Boolean test_branch_name(branch) {
-    return env.BRANCH_NAME.startsWith(branch)
+    return BRANCH_NAME.startsWith(branch)
 }
