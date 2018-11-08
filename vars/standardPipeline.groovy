@@ -25,6 +25,7 @@ def call(body) {
                 break
             default:
                 // default_environment()
+                break
         }
     }
 }
