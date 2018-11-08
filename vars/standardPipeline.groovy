@@ -126,6 +126,11 @@ def call(body) {
                     }
                 }
             }
+            post { 
+                always { 
+                    deleteDir()
+                }
+            }
         }
     } else {
         if(TAG_NAME == null || TAG_NAME == "") {
