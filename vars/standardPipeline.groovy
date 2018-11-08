@@ -127,15 +127,24 @@ def call(body) {
             }
         }
     } else {
-        pipeline {
-            agent any
-            stages {
-                stage('Deploy') {
-                    steps {
-                        echo "Olá!"
+        if(TAG_NAME == null || TAG_NAME == "") {
+            echo "O parâmetro TAG_NAME é obrigatório!"
+            currentBuild.result = 'FAILURE'
+        } else { 
+            pipeline {
+                agent any
+                stages {
+                    stage('Checkout') {
+                        steps {
+                            echo "===================================================="
+                            echo "Checkout Stage"
+                            echo "===================================================="
+                            echo 'TAG_NAME = ' + TAG_NAME
+                            sh 'git checkout ' + TAG_NAME
+                        }
                     }
-                }
-            }  
+                }  
+            }
         }
     }
 } 
