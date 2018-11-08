@@ -9,7 +9,7 @@ def call(body) {
         commit_message = sh (script: 'git log -1 --pretty=%B',returnStdout: true).trim()   
     }
 
-    println ENVIRONMENT
+    println ENVIRONMENT.getClass()
 
     if (commit_message.startsWith("[maven-release-plugin]")) {    
         currentBuild.result = 'SUCCESS'
