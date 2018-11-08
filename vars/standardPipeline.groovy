@@ -8,10 +8,9 @@ def call(body) {
     def nothing = (ENVIRONMENT == "" || ENVIRONMENT == null) ? true : false
     def commit_message = null
     node {
-        commit_message = sh (script: 'git log -1 --pretty=%B',returnStdout: true).trim()
-        commit_message2 = sh (script: 'git log -1',returnStdout: true).trim()
-        echo commit_message
-        echo commit_message2   
+        deleteDir()
+        def VARS = checkout scm
+        commit_message = sh (script: 'git log -1 --pretty=%B',returnStdout: true).trim()   
     }
     if (commit_message.startsWith("[maven-release-plugin]")) {    
         currentBuild.result = 'SUCCESS'
