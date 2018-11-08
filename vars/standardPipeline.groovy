@@ -28,7 +28,7 @@ def call(body) {
     }
 }
 
-def void default_environment() {
+def default_environment() {
     pipeline { 
         agent any
         stages {
@@ -65,7 +65,7 @@ def void default_environment() {
     }
 }
 
-def void production_environment() {
+def production_environment() {
     pipeline {
         agent any
         stages {
