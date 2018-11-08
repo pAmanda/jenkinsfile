@@ -8,64 +8,74 @@ def call(body) {
     node {
         commit_message = sh (script: 'git log -1 --pretty=%B',returnStdout: true).trim()   
     }
+
     if (commit_message.startsWith("[maven-release-plugin]")) {    
         currentBuild.result = 'SUCCESS'
         echo "Commit message starts with maven-release-plugin. Exiting..."   
-    } 
-
-    if(TEST == PRODUCTION) {
-        throw new Exception('Tipos de ambiente para deploy não podem ter o mesmo valor.')
+    } else {
+        switch(ENVIRONMENT) {
+            case 'Homologation':
+                default_environment()
+                break
+            case 'Production':
+                production_environment()
+                break
+            default:
+                default_environment()
+                break
+        }
     }
+}
 
-    if(Test == 'true') {
-        pipeline { 
-            agent any
-            stages {
-                stage('Checkout') {
-                    steps {
-                        echo "===================================================="
-                        echo "Checkout Stage"
-                        echo "===================================================="
-                        script {
-                            BRANCH_NAME = (BRANCH_NAME == '' || BRANCH_NAME == null) ?  get_branch_name(GIT_BRANCH) : get_branch_name(BRANCH_NAME) 
-                        }
-                        echo "BRANCH_NAME = " + BRANCH_NAME
-                        echo "PARAMETERS = VERSION: " + VERSION + " e NEXT_VERSION: " + NEXT_VERSION
-                        sh 'git checkout ' + BRANCH_NAME
+def void default_environment() {
+    pipeline { 
+        agent any
+        stages {
+            stage('Checkout') {
+                steps {
+                    echo "===================================================="
+                    echo "Checkout Stage"
+                    echo "===================================================="
+                    script {
+                        BRANCH_NAME = (BRANCH_NAME == '' || BRANCH_NAME == null) ?  get_branch_name(GIT_BRANCH) : get_branch_name(BRANCH_NAME) 
                     }
+                    echo "BRANCH_NAME = " + BRANCH_NAME
+                    echo "PARAMETERS = VERSION: " + VERSION + " e NEXT_VERSION: " + NEXT_VERSION
+                    sh 'git checkout ' + BRANCH_NAME
                 }
-                stage('Build') {
-                    steps {
-                        echo "===================================================="
-                        echo "Build Stage"
-                        echo "===================================================="
-                        sh "mvn clean install -Dmaven.test.skip=true -Dmaven.javadoc.skip=true"
-                    }
+            }
+            stage('Build') {
+                steps {
+                    echo "===================================================="
+                    echo "Build Stage"
+                    echo "===================================================="
+                    sh "mvn clean install -Dmaven.test.skip=true -Dmaven.javadoc.skip=true"
                 }
-                stage('Test') { 
-                    steps {                        
-                        echo "===================================================="
-                        echo "Test Stage"
-                        echo "===================================================="
-                        sh "mvn test"
-                    }
+            }
+            stage('Test') { 
+                steps {                        
+                    echo "===================================================="
+                    echo "Test Stage"
+                    echo "===================================================="
+                    sh "mvn test"
                 }
             }
         }
-    } else {
-        pipeline {
-            agent any
-            stages {
-                stage('Deploy') {
-                    steps {
-                        echo "Olá!"
-                        echo Production
-                        echo Test
-                    }
-                }
-            }            
-        }
+    }
+}
 
+def void production_environment() {
+    pipeline {
+        agent any
+        stages {
+            stage('Deploy') {
+                steps {
+                    echo "Olá!"
+                    echo Production
+                    echo Test
+                }
+            }
+        }            
     }
 }
 
