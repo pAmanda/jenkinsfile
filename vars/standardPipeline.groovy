@@ -9,18 +9,18 @@ def call(body) {
         commit_message = sh (script: 'git log -1 --pretty=%B',returnStdout: true).trim()   
     }
 
-    println ENVIRONMENT.getClass()
+    ENVIRONMENT = ENVIRONMENT.trim()
 
     if (commit_message.startsWith("[maven-release-plugin]")) {    
         currentBuild.result = 'SUCCESS'
         echo "Commit message starts with maven-release-plugin. Exiting..."   
     } else {
         switch(ENVIRONMENT) {
-            case 'Homologation':
+            case "Homologation":
                 // default_environment()
                 echo "OK"
                 break
-            case 'Production':
+            case "Production":
                 // production_environment()
                 break
             default:
