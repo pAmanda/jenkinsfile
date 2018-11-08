@@ -28,7 +28,7 @@ def call(body) {
                         script {
                             BRANCH_NAME = (BRANCH_NAME == '' || BRANCH_NAME == null) ?  get_branch_name(GIT_BRANCH) : get_branch_name(BRANCH_NAME) 
                         }
-                        echo "BRANCH_NAME =" + BRANCH_NAME
+                        echo "BRANCH_NAME = " + BRANCH_NAME
                         echo "PARAMETERS = VERSION: " + VERSION + " e NEXT_VERSION: " + NEXT_VERSION
                         sh 'git checkout ' + BRANCH_NAME
                     }
@@ -38,6 +38,7 @@ def call(body) {
                         echo "===================================================="
                         echo "Build Stage"
                         echo "===================================================="
+                        sh "mvn clean install -Dmaven.test.skip=true -Dmaven.javadoc.skip=true"
                     }
                 }
             }
