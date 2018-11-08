@@ -4,7 +4,7 @@ def call(body) {
     //     durabilityHint('PERFORMANCE_OPTIMIZED')
     // ])
 
-    def commit_message = null
+    def commit_message
     node {
         commit_message = sh (script: 'git log -1 --pretty=%B',returnStdout: true).trim()   
     }
