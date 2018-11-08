@@ -37,30 +37,30 @@ def void default_environment() {
                     echo "===================================================="
                     echo "Checkout Stage"
                     echo "===================================================="
-                    script {
-                        BRANCH_NAME = (BRANCH_NAME == '' || BRANCH_NAME == null) ?  get_branch_name(GIT_BRANCH) : get_branch_name(BRANCH_NAME) 
-                    }
-                    echo "BRANCH_NAME = " + BRANCH_NAME
-                    echo "PARAMETERS = VERSION: " + VERSION + " e NEXT_VERSION: " + NEXT_VERSION
-                    sh 'git checkout ' + BRANCH_NAME
+                    // script {
+                    //     BRANCH_NAME = (BRANCH_NAME == '' || BRANCH_NAME == null) ?  get_branch_name(GIT_BRANCH) : get_branch_name(BRANCH_NAME) 
+                    // }
+                    // echo "BRANCH_NAME = " + BRANCH_NAME
+                    // echo "PARAMETERS = VERSION: " + VERSION + " e NEXT_VERSION: " + NEXT_VERSION
+                    // sh 'git checkout ' + BRANCH_NAME
                 }
             }
-            stage('Build') {
-                steps {
-                    echo "===================================================="
-                    echo "Build Stage"
-                    echo "===================================================="
-                    sh "mvn clean install -Dmaven.test.skip=true -Dmaven.javadoc.skip=true"
-                }
-            }
-            stage('Test') { 
-                steps {                        
-                    echo "===================================================="
-                    echo "Test Stage"
-                    echo "===================================================="
-                    sh "mvn test"
-                }
-            }
+            // stage('Build') {
+            //     steps {
+            //         echo "===================================================="
+            //         echo "Build Stage"
+            //         echo "===================================================="
+            //         sh "mvn clean install -Dmaven.test.skip=true -Dmaven.javadoc.skip=true"
+            //     }
+            // }
+            // stage('Test') { 
+            //     steps {                        
+            //         echo "===================================================="
+            //         echo "Test Stage"
+            //         echo "===================================================="
+            //         sh "mvn test"
+            //     }
+            // }
         }
     }
 }
@@ -101,5 +101,5 @@ def Boolean branch_is_hotfix() {
 }
 
 def Boolean test_branch_name(branch) {
-    return BRANCH_NAME.startsWith(branch)
+    return env.BRANCH_NAME.startsWith(branch)
 }
