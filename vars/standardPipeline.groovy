@@ -179,7 +179,7 @@ def call(body) {
                             echo "===================================================="
                             script {
                                 def pom = readMavenPom()
-                                def imageName = "docker-registry-default.apps-staging.cabal.com.br/sippe/" + pom.getArtifactId() + pom.getVersion()
+                                def imageName = "docker-registry-default.apps-staging.cabal.com.br/sippe/" + pom.getArtifactId() + ":" + pom.getVersion()
                                 echo imageName 
                             }
                         }
