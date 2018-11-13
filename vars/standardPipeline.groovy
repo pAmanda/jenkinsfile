@@ -184,11 +184,11 @@ def call(body) {
                         }
                     }
                 }
-                post { 
-                    always { 
-                        deleteDir()
-                    }
-                }  
+                // post { 
+                //     always { 
+                //         deleteDir()
+                //     }
+                // }  
             }
         }
     }
