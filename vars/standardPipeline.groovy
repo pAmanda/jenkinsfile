@@ -182,8 +182,10 @@ def call(body) {
                             echo "===================================================="
                             echo "Docker Stage"
                             echo "===================================================="
-                            def pom = readMavenPom()
-                            echo "GroupId= " + pom.getGroupId()
+                            script {
+                                def pom = readMavenPom()
+                                echo "GroupId= " + pom.getGroupId()
+                            }
                         }
                     }
                 }
