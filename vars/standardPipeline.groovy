@@ -100,6 +100,24 @@ def call(body) {
                 stage('Archive') {
                     when {
                         expression {
+                            branch_is_master_hotfix()
+                        } 
+                    }
+                    steps {
+                        echo "===================================================="
+                        echo "Archive Stage"
+                        echo "===================================================="
+                        sh 'mvn deploy -Dmaven.test.skip=true'
+                    }
+                }
+                stage('Release') {
+                    // input {
+                    //     message "Pode continuar?"
+                    //     ok "Sim"
+                    //     submitter "jenkins-admin"
+                    // }
+                    when {
+                        expression {
                             branch_is_master_hotfix() && different_versions()
                         } 
                     }
@@ -150,6 +168,11 @@ def call(body) {
                         }
                     }
                     stage('Docker') {
+                        // input {
+                        //     message "Pode continuar?"
+                        //     ok "Sim"
+                        //     submitter "jenkins-admin"
+                        // }
                         when {
                             expression {
                                 branch_is_master_hotfix() && different_versions()
@@ -159,9 +182,8 @@ def call(body) {
                             echo "===================================================="
                             echo "Docker Stage"
                             echo "===================================================="
-                            echo "Fazendo checkout na tag gerada"
-                            sh 'git checkout ' + TAG_NAME
-                            echo "===================================================="
+                            def pom = readMavenPom()
+                            echo "GroupId= " + pom.getGroupId()
                         }
                     }
                 }
@@ -206,3 +228,4 @@ def Boolean branch_is_master_hotfix() {
 def Boolean different_versions() {
     return VERSION != NEXT_VERSION;
 }
+
