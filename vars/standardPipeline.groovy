@@ -226,6 +226,3 @@ def Boolean branch_is_master_hotfix() {
 def Boolean different_versions() {
     return VERSION != NEXT_VERSION;
 }
-
-
-docker-registry-default.apps-staging.cabal.com.br/sippe/${project.artifactId}:${project.version}
