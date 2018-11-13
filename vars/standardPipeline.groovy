@@ -173,11 +173,6 @@ def call(body) {
                         //     ok "Sim"
                         //     submitter "jenkins-admin"
                         // }
-                        when {
-                            expression {
-                                branch_is_master_hotfix() && different_versions()
-                            } 
-                        }
                         steps {
                             echo "===================================================="
                             echo "Docker Stage"
