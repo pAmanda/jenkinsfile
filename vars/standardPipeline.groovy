@@ -179,7 +179,8 @@ def call(body) {
                             echo "===================================================="
                             script {
                                 def pom = readMavenPom()
-                                echo "GroupId= " + pom.getGroupId()
+                                def imageName = "docker-registry-default.apps-staging.cabal.com.br/sippe/" + pom.getArtifactId() + pom.getVersion()
+                                echo imageName 
                             }
                         }
                     }
@@ -226,3 +227,5 @@ def Boolean different_versions() {
     return VERSION != NEXT_VERSION;
 }
 
+
+docker-registry-default.apps-staging.cabal.com.br/sippe/${project.artifactId}:${project.version}
