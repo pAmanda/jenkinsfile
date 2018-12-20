@@ -2,13 +2,16 @@ def call(body) {
 
     def cabal = CABAL.trim()
 
-    def parameters = CABAL.split(';')
+    def parameters = cabal.split(';')
 
     def map = [:]
 
     for(int i = 0; i < parameters.size(); i++) {
-        println(parameters[i])
+        param = parameters[i].split(':')
+        map.put(param[0], param[1])
     }
+
+    println(map.get('ENVIRONMENT'))
 
     def commit_message = null
     node {
