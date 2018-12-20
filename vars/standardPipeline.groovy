@@ -4,7 +4,6 @@ def call(body) {
 
     def parameters = CABAL.split(';')
 
-
     def commit_message = null
     node {
         deleteDir()
@@ -19,6 +18,7 @@ def call(body) {
             stage('Build') {
                 steps {
                     echo "Parameter: " + CABAL
+                    echo "Split: " + parameters.size()
                 }
             }
         }
