@@ -1,8 +1,14 @@
 def call(body) {
 
-    CABAL = CABAL.trim()
+    def cabal = CABAL.trim()
 
     def parameters = CABAL.split(';')
+
+    def map = [:]
+
+    for(int i = 0; i < parameters.size(); i++) {
+        println(parameters[i])
+    }
 
     def commit_message = null
     node {
@@ -17,7 +23,7 @@ def call(body) {
         stages {
             stage('Build') {
                 steps {
-                    echo "Parameter: " + CABAL
+                    echo "Parameter: " + cabal
                     echo "Split: " + parameters.size()
                 }
             }
