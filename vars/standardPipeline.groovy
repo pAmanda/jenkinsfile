@@ -61,7 +61,7 @@ def call(body) {
                         echo "Checkout Stage"
                         echo "===================================================="
                         script {
-                            branch_name = (branch_name?.trim() && !branch_name.isEmpty()) ? get_branch_name(branch_name) : get_branch_name(GIT_BRANCH)
+                            branch_name = (branch_name?.trim()) ? get_branch_name(branch_name) : get_branch_name(GIT_BRANCH)
                         }
                         echo "GIT_BRANCH = " + GIT_BRANCH
                         echo "BRANCH_NAME = " + branch_name
