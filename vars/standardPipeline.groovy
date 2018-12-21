@@ -63,7 +63,7 @@ def call(body) {
                         script {
                             def BOOL = branch_name?.trim()
                             if(BOOL) {
-                                echo "BOOL = " + BOOL
+                                echo "BOOL = " + BOOL == false
                                 echo "BRANCH NAME NÃO É NULLLLL"
                                 branch_name = get_branch_name(GIT_BRANCH)
                             } else {
