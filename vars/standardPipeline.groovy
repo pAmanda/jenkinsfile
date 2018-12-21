@@ -16,7 +16,7 @@ def call(body) {
     for(int i = 0; i < parameters.size(); i++) {
         println("Parâmetro " + i + ": " + parameters[i])
         def param = parameters[i].split(':')
-        for(int x = 0; x < param.size(); i++) {
+        for(int x = 0; x < param.size(); x++) {
             println("Param: " + param[x])
             map.put(param[0], param[1])
         }
