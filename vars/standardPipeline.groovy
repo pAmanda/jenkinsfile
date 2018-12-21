@@ -10,7 +10,7 @@ def call(body) {
     def cabal = CABAL
     println("CABAL: " + cabal)
 
-    if(string_is_empty(cabal)) {
+    if(environment?.trim()) {
         environment = 'default'
 
     } else {
@@ -147,7 +147,7 @@ def call(body) {
                     // }
                     when {
                         expression {
-                            branch_is_master_hotfix() && different_versions()
+                            branch_is_master_hotfix() && version?.trim() && next_version?.trim()
                         }
                     }
                     steps {
@@ -160,7 +160,7 @@ def call(body) {
                 stage('Docker') {
                     when {
                         expression {
-                            branch_is_master_hotfix() && different_versions()
+                            branch_is_master_hotfix() && version?.trim() && next_version?.trim()
                         }
                     }
                     steps {
@@ -214,10 +214,6 @@ def call(body) {
     }
 }
 
-def Boolean string_is_empty(string) {
-    return (string == null || string == '')
-}
-
 def String get_branch_name(branch_name) {
     return branch_name.replaceAll("origin/", "").trim()
 }
@@ -230,10 +226,6 @@ def Boolean branch_is_master() {
     return test_branch_name("master")
 }
 
-def Boolean branch_is_develop() {
-    return test_branch_name("develop")
-}
-
 def Boolean branch_is_hotfix() {
     return test_branch_name("hotfix/")
 }
@@ -244,8 +236,4 @@ def Boolean test_branch_name(branch) {
 
 def Boolean branch_is_master_hotfix() {
     return branch_is_master() || branch_is_hotfix()
-}
-
-def Boolean different_versions() {
-    return version != next_version
 }
