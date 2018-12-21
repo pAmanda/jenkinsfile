@@ -62,6 +62,7 @@ def call(body) {
                         script {
                             branch_name = branch_name?.trim() ? get_branch_name(GIT_BRANCH) : get_branch_name(branch_name)
                         }
+                        echo "GIT_BRANCH = " + GIT_BRANCH
                         echo "BRANCH_NAME = " + branch_name
                         echo "PARAMETERS = VERSION: " + version + " e NEXT_VERSION: " + next_version
                         sh 'git checkout ' + branch_name
