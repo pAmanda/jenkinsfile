@@ -16,8 +16,7 @@ def call(body) {
     for(int i = 0; i < parameters.size(); i++) {
         println("Parâmetro " + i + ": " + parameters[i])
         def param = parameters[i].split(':')
-        println("Param: " + param[0].trim() + param[1].trim() + "oi")
-        map[param[0]] = param[1]
+        map[param[0].trim()] = param[1].trim()
     }
 
     environment = map.get('ENVIRONMENT')
