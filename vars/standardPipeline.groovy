@@ -1,21 +1,17 @@
-environment = ''
-next_version = ''
-version = ''
-tag_name = ''
-branch_name = ''
-
 def call(body) {
 
     // Pega a variável CABAL passada como parâmetro e extrai as variáveis internas importantes.
     def cabal = CABAL
-    println("CABAL: " + cabal + "Bool: " + !cabal?.trim())
+    def environment = ''
+    def next_version = ''
+    def version = ''
+    def tag_name = ''
+    def branch_name = ''
+
+    println("CABAL: " + this.cabal)
 
     if(cabal?.trim()) {
-        environment = 'default'
-//        next_version = ''
-//        version = ''
-//        tag_name = ''
-//        branch_name = ''
+        this.environment = 'default'
 
     } else {
         def parameters = cabal.split(';')
@@ -23,14 +19,14 @@ def call(body) {
         for(int i = 0; i < parameters.size(); i++) {
             println("Parâmetro " + i + ": " + parameters[i])
             def param = parameters[i].split(':')
-            map.put(param[0].trim(), param[1].trim())
+            this.map.put(param[0].trim(), param[1].trim())
         }
 
-        environment = map.get('ENVIRONMENT')
-        next_version = map.get('NEXT_VERSION')
-        version = map.get('VERSION')
-        tag_name = map.get('TAG_NAME')
-        branch_name = map.get('BRANCH_NAME')
+        this.environment = map.get('ENVIRONMENT')
+        this.next_version = map.get('NEXT_VERSION')
+        this.version = map.get('VERSION')
+        this.tag_name = map.get('TAG_NAME')
+        this.branch_name = map.get('BRANCH_NAME')
     }
 
     println("environment: " + environment + " next_version: " + next_version + " version: " + version + " tag_name: " + tag_name + " branch_name: " + branch_name)
