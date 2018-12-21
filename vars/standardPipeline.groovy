@@ -6,14 +6,14 @@ branch_name = ''
 
 def call(body) {
 
+    println("AMANDA: " + AMANDA)
+
     // Pega a variável CABAL passada como parâmetro e extrai as variáveis internas importantes.
     def cabal = CABAL
     def parameters = cabal.split(';')
     def map = [:]
 
     println("CABAL: " + cabal)
-
-    println("AMANDA: " + AMANDA)
 
     for(int i = 0; i < parameters.size(); i++) {
         println("Parâmetro " + i + ": " + parameters[i])
