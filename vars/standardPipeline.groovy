@@ -35,14 +35,14 @@ def call(body) {
     node {
         deleteDir()
         checkout scm
-        commit_message = sh (script: 'git log -1 --pretty=%B',returnStdout: true).trim()
+        this.commit_message = sh (script: 'git log -1 --pretty=%B',returnStdout: true).trim()
     }
 
-    if (commit_message.startsWith("[maven-release-plugin]")) {
+    if (this.commit_message.startsWith("[maven-release-plugin]")) {
         currentBuild.result = 'SUCCESS'
         echo "Commit message starts with maven-release-plugin. Exiting..."
 
-    } else if(environment == 'staging' || environment == 'default') {
+    } else if(this.environment == 'staging' || this.environment == 'default') {
         pipeline {
             agent any
             tools {
@@ -56,11 +56,11 @@ def call(body) {
                         echo "Checkout Stage"
                         echo "===================================================="
                         script {
-                            branch_name = branch_name?.trim() ? get_branch_name(GIT_BRANCH) : get_branch_name(branch_name)
+                            this.branch_name = this.branch_name?.trim() ? get_branch_name(GIT_BRANCH) : get_branch_name(this.branch_name)
                         }
-                        echo "BRANCH_NAME = " + branch_name
-                        echo "PARAMETERS = VERSION: " + version + " e NEXT_VERSION: " + next_version
-                        sh 'git checkout ' + branch_name
+                        echo "BRANCH_NAME = " + this.branch_name
+                        echo "PARAMETERS = VERSION: " + this.version + " e NEXT_VERSION: " + this.next_version
+                        sh 'git checkout ' + this.branch_name
                     }
                 }
                 stage('Build') {
@@ -147,20 +147,20 @@ def call(body) {
                     // }
                     when {
                         expression {
-                            branch_is_master_hotfix() && version?.trim() && next_version?.trim()
+                            branch_is_master_hotfix() && this.version?.trim() && this.next_version?.trim()
                         }
                     }
                     steps {
                         echo "===================================================="
                         echo "Release Stage"
                         echo "===================================================="
-                        sh 'mvn -B release:prepare release:perform -DreleaseVersion=${version} -DdevelopmentVersion=${next_version}'
+                        sh 'mvn -B release:prepare release:perform -DreleaseVersion=' + this.version +  '-DdevelopmentVersion=' + this.next_version
                     }
                 }
                 stage('Docker') {
                     when {
                         expression {
-                            branch_is_master_hotfix() && version?.trim() && next_version?.trim()
+                            branch_is_master_hotfix() && this.version?.trim() && this.next_version?.trim()
                         }
                     }
                     steps {
@@ -176,7 +176,7 @@ def call(body) {
             }
         }
     } else {
-        if(tag_name == null || tag_name == '') {
+        if(this.tag_name == null || this.tag_name == '') {
             echo "O parâmetro tag_name é obrigatório!"
             currentBuild.result = 'FAILURE'
         } else {
@@ -188,8 +188,8 @@ def call(body) {
                             echo "===================================================="
                             echo "Checkout Stage"
                             echo "===================================================="
-                            echo 'tag_name = ' + tag_name
-                            sh 'git checkout ' + tag_name
+                            echo 'tag_name = ' + this.tag_name
+                            sh 'git checkout ' + this.tag_name
                         }
                     }
                     stage('Docker') {
