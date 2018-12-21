@@ -22,6 +22,8 @@ def call(body) {
     tag_name = map.get('TAG_NAME')
     branch_name = map.get('BRANCH_NAME')
 
+    println("environment: " + environment + " next_version: " + next_version + " version: " + version + " tag_name: " + tag_name + " branch_name: " + branch_name)
+
     def commit_message = null
     node {
         deleteDir()
