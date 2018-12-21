@@ -12,10 +12,10 @@ def call(body) {
 
     if(cabal?.trim()) {
         environment = 'default'
-        next_version = ''
-        version = ''
-        tag_name = ''
-        branch_name = ''
+//        next_version = ''
+//        version = ''
+//        tag_name = ''
+//        branch_name = ''
 
     } else {
         def parameters = cabal.split(';')
