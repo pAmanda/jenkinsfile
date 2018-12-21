@@ -155,6 +155,9 @@ def call(body) {
                             branch_is_master_hotfix() && different_versions()
                         }
                     }
+                    steps {
+                        echo "DOCKER"
+                    }
                     //step
                 }
             }
@@ -188,6 +191,9 @@ def call(body) {
                         //     submitter "jenkins-admin"
                         // }
                         //step
+                        steps {
+                            echo "DOCKER"
+                        }
                     }
                 }
                 post {
