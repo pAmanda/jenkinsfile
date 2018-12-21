@@ -10,14 +10,7 @@ def call(body) {
     def cabal = CABAL
     println("CABAL: " + cabal + "Bool: " + !cabal?.trim())
 
-    if(cabal?.trim()) {
-        environment = 'default'
-        next_version = ''
-        version = ''
-        tag_name = ''
-        branch_name = ''
-
-    } else {
+    if(cabal != null && !cabal.isEmpty()) {
         def parameters = cabal.split(';')
         def map = [:]
         for(int i = 0; i < parameters.size(); i++) {
@@ -31,6 +24,14 @@ def call(body) {
         version = map.get('VERSION')
         tag_name = map.get('TAG_NAME')
         branch_name = map.get('BRANCH_NAME')
+
+    } else {
+        environment = 'default'
+        next_version = ''
+        version = ''
+        tag_name = ''
+        branch_name = ''
+
     }
 
     println("environment: " + environment + " next_version: " + next_version + " version: " + version + " tag_name: " + tag_name + " branch_name: " + branch_name)
@@ -60,7 +61,7 @@ def call(body) {
                         echo "Checkout Stage"
                         echo "===================================================="
                         script {
-                            branch_name = branch_name?.trim() ? get_branch_name(GIT_BRANCH) : get_branch_name(branch_name)
+                            branch_name = (branch_name != null && !branch_name.isEmpty()) ? get_branch_name(branch_name) : get_branch_name(GIT_BRANCH)
                         }
                         echo "GIT_BRANCH = " + GIT_BRANCH
                         echo "BRANCH_NAME = " + branch_name
