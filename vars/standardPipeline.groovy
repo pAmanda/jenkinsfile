@@ -59,7 +59,13 @@ def call(body) {
                             sh 'printenv'
                             echo "GIT_BRANCH: " + GIT_BRANCH
                             echo "branch_name: " + branch_name
-                            branch_name = (branch_name == null || branch_name.trim().length() == 0) ? get_branch_name(GIT_BRANCH) : get_branch_name(branch_name)
+                            if(branch_name == null || branch_name == '') {
+                                echo "BRANCH_NAME É NULLAAA"
+                                branch_name = get_branch_name(GIT_BRANCH)
+                            } else {
+                                branch_name = get_branch_name(branch_name)
+                            }
+                            //branch_name = (branch_name == null || branch_name.trim().length() == 0) ? get_branch_name(GIT_BRANCH) : get_branch_name(branch_name)
                         }
                         echo "BRANCH_NAME = " + branch_name
                         echo "PARAMETERS = VERSION: " + version + " e NEXT_VERSION: " + next_version
