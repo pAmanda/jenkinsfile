@@ -13,6 +13,8 @@ def call(body) {
 
     println("CABAL: " + cabal)
 
+    println("AMANDA: " + AMANDA)
+
     for(int i = 0; i < parameters.size(); i++) {
         println("Parâmetro " + i + ": " + parameters[i])
         def param = parameters[i].split(':')
@@ -144,7 +146,7 @@ def call(body) {
                     when {
                         expression {
                             branch_is_master_hotfix() && different_versions()
-                        }
+                            }
                     }
                     steps {
                         echo "===================================================="
