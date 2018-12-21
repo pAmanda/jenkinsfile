@@ -11,7 +11,10 @@ def call(body) {
     def parameters = cabal.split(';')
     def map = [:]
 
+    println("CABAL: " + cabal)
+
     for(int i = 0; i < parameters.size(); i++) {
+        println("Parâmetro " + i + ": " + parameters[i])
         def param = parameters[i].split(':')
         map.put(param[0], param[1])
     }
