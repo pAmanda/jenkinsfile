@@ -221,7 +221,7 @@ def Boolean string_is_empty(string) {
 }
 
 def String get_branch_name(branch_name) {
-    return branch_name.replaceAll("origin/", "").trim();
+    return branch_name.replaceAll("origin/", "").trim()
 }
 
 def Boolean branch_is_feature() {
