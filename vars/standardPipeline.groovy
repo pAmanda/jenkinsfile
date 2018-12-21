@@ -29,7 +29,7 @@ def call(body) {
         this.branch_name = map.get('BRANCH_NAME')
     }
 
-    println("environment: " + environment + " next_version: " + next_version + " version: " + version + " tag_name: " + tag_name + " branch_name: " + branch_name)
+    println("environment: " + this.environment + " next_version: " + this.next_version + " version: " + this.version + " tag_name: " + this.tag_name + " branch_name: " + this.branch_name)
 
     def commit_message = null
     node {
