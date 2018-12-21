@@ -8,22 +8,26 @@ def call(body) {
 
     // Pega a variável CABAL passada como parâmetro e extrai as variáveis internas importantes.
     def cabal = CABAL
-    def parameters = cabal.split(';')
-    def map = [:]
-
     println("CABAL: " + cabal)
 
-    for(int i = 0; i < parameters.size(); i++) {
-        println("Parâmetro " + i + ": " + parameters[i])
-        def param = parameters[i].split(':')
-        map[param[0].trim()] = param[1].trim()
-    }
+    if(string_is_empty(cabal)) {
+        environment = 'default'
 
-    environment = map.get('ENVIRONMENT')
-    next_version = map.get('NEXT_VERSION')
-    version = map.get('VERSION')
-    tag_name = map.get('TAG_NAME')
-    branch_name = map.get('BRANCH_NAME')
+    } else {
+        def parameters = cabal.split(';')
+        def map = [:]
+        for(int i = 0; i < parameters.size(); i++) {
+            println("Parâmetro " + i + ": " + parameters[i])
+            def param = parameters[i].split(':')
+            map.put(param[0].trim(), param[1].trim())
+        }
+
+        environment = map.get('ENVIRONMENT')
+        next_version = map.get('NEXT_VERSION')
+        version = map.get('VERSION')
+        tag_name = map.get('TAG_NAME')
+        branch_name = map.get('BRANCH_NAME')
+    }
 
     println("environment: " + environment + " next_version: " + next_version + " version: " + version + " tag_name: " + tag_name + " branch_name: " + branch_name)
 
@@ -52,7 +56,7 @@ def call(body) {
                         echo "Checkout Stage"
                         echo "===================================================="
                         script {
-                            branch_name = (branch_name == '' || branch_name == null) ?  get_branch_name(GIT_BRANCH) : get_branch_name(branch_name)
+                            branch_name = string_is_empty(branch_name) ? get_branch_name(GIT_BRANCH) : get_branch_name(branch_name)
                         }
                         echo "BRANCH_NAME = " + branch_name
                         echo "PARAMETERS = VERSION: " + version + " e NEXT_VERSION: " + next_version
@@ -144,7 +148,7 @@ def call(body) {
                     when {
                         expression {
                             branch_is_master_hotfix() && different_versions()
-                            }
+                        }
                     }
                     steps {
                         echo "===================================================="
@@ -172,7 +176,7 @@ def call(body) {
             }
         }
     } else {
-        if(tag_name == null || tag_name == "") {
+        if(tag_name == null || tag_name == '') {
             echo "O parâmetro tag_name é obrigatório!"
             currentBuild.result = 'FAILURE'
         } else {
@@ -208,6 +212,10 @@ def call(body) {
             }
         }
     }
+}
+
+def Boolean string_is_empty(string) {
+    return (string == null || string == '')
 }
 
 def String get_branch_name(branch_name) {
