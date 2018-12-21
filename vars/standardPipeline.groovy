@@ -61,11 +61,13 @@ def call(body) {
                         echo "Checkout Stage"
                         echo "===================================================="
                         script {
-                            if(branch_name?.trim()) {
+                            def BOOL = branch_name?.trim()
+                            if(BOOL) {
+                                echo "BOOL = " + BOOL
                                 echo "BRANCH NAME NÃO É NULLLLL"
-                                branch_name = get_branch_name(branch_name)
-                            } else {
                                 branch_name = get_branch_name(GIT_BRANCH)
+                            } else {
+                                branch_name = get_branch_name(branch_name)
                             }
                         }
                         echo "GIT_BRANCH = " + GIT_BRANCH
