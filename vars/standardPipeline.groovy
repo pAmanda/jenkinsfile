@@ -10,7 +10,14 @@ def call(body) {
     def cabal = CABAL
     println("CABAL: " + cabal + "Bool: " + !cabal?.trim())
 
-    if(cabal != null && !cabal.isEmpty()) {
+    if(cabal?.trim()) {
+        environment = 'default'
+        next_version = ''
+        version = ''
+        tag_name = ''
+        branch_name = ''
+
+    } else {
         def parameters = cabal.split(';')
         def map = [:]
         for(int i = 0; i < parameters.size(); i++) {
@@ -18,20 +25,11 @@ def call(body) {
             def param = parameters[i].split(':')
             map.put(param[0].trim(), param[1].trim())
         }
-
         environment = map.get('ENVIRONMENT')
         next_version = map.get('NEXT_VERSION')
         version = map.get('VERSION')
         tag_name = map.get('TAG_NAME')
         branch_name = map.get('BRANCH_NAME')
-
-    } else {
-        environment = 'default'
-        next_version = ''
-        version = ''
-        tag_name = ''
-        branch_name = ''
-
     }
 
     println("environment: " + environment + " next_version: " + next_version + " version: " + version + " tag_name: " + tag_name + " branch_name: " + branch_name)
@@ -61,10 +59,7 @@ def call(body) {
                         echo "Checkout Stage"
                         echo "===================================================="
                         script {
-                            def BOOL = branch_name?.trim()
-                            if(BOOL) {
-                                echo "BOOL = " + (BOOL == false).toString()
-                                echo "BRANCH NAME NÃO É NULLLLL"
+                            if(branch_name?.trim()) {
                                 branch_name = get_branch_name(GIT_BRANCH)
                             } else {
                                 branch_name = get_branch_name(branch_name)
