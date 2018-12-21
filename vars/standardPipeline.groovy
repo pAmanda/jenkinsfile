@@ -8,7 +8,8 @@ def call(body) {
 
     // Pega a variável CABAL passada como parâmetro e extrai as variáveis internas importantes.
     def cabal = CABAL
-    println("CABAL: " + cabal + "Bool: " + !cabal?.trim())
+    def test = null
+    println("CABAL: " + cabal + "Bool: " + !test?.trim())
 
     if(cabal?.trim()) {
         environment = 'default'
@@ -31,7 +32,6 @@ def call(body) {
         tag_name = map.get('TAG_NAME')
         branch_name = map.get('BRANCH_NAME')
     }
-
     println((null == false).toString())
 
     println("environment: " + environment + " next_version: " + next_version + " version: " + version + " tag_name: " + tag_name + " branch_name: " + branch_name)
