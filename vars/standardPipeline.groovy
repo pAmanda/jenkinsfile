@@ -1,17 +1,26 @@
+environment = ''
+next_version = ''
+version = ''
+tag_name = ''
+branch_name = ''
+
 def call(body) {
 
+    // Pega a variável CABAL passada como parâmetro e extrai as variáveis internas importantes.
     def cabal = CABAL.trim()
-
     def parameters = cabal.split(';')
-
     def map = [:]
 
     for(int i = 0; i < parameters.size(); i++) {
-        param = parameters[i].split(':')
+        def param = parameters[i].split(':')
         map.put(param[0], param[1])
     }
 
-    println(map.get('ENVIRONMENT'))
+    environment = map.get('ENVIRONMENT')
+    next_version = map.get('NEXT_VERSION')
+    version = map.get('VERSION')
+    tag_name = map.get('TAG_NAME')
+    branch_name = map.get('BRANCH_NAME')
 
     def commit_message = null
     node {
@@ -21,13 +30,170 @@ def call(body) {
         commit_message = sh (script: 'git log -1 --pretty=%B',returnStdout: true).trim()
     }
 
-    pipeline {
-        agent any
-        stages {
-            stage('Build') {
-                steps {
-                    echo "Parameter: " + cabal
-                    echo "Split: " + parameters.size()
+    if (commit_message.startsWith("[maven-release-plugin]")) {
+        currentBuild.result = 'SUCCESS'
+        echo "Commit message starts with maven-release-plugin. Exiting..."
+
+    } else if(environment == 'staging' || environment == 'default') {
+        pipeline {
+            agent any
+            tools {
+                maven 'maven'
+                jdk 'JDK 1.8.0_66'
+            }
+            stages {
+                stage('Checkout') {
+                    steps {
+                        echo "===================================================="
+                        echo "Checkout Stage"
+                        echo "===================================================="
+                        script {
+                            branch_name = (branch_name == '' || branch_name == null) ?  get_branch_name(GIT_BRANCH) : get_branch_name(branch_name)
+                        }
+                        echo "BRANCH_NAME = " + branch_name
+                        echo "PARAMETERS = VERSION: " + version + " e NEXT_VERSION: " + next_version
+                        sh 'git checkout ' + branch_name
+                    }
+                }
+                stage('Build') {
+                    steps {
+                        echo "===================================================="
+                        echo "Build Stage"
+                        echo "===================================================="
+                        sh "mvn clean install -Dmaven.test.skip=true -Dmaven.javadoc.skip=true"
+                    }
+                }
+                stage('Test') {
+                    when {
+                        not {
+                            expression {
+                                branch_is_feature()
+                            }
+                        }
+                    }
+                    steps {
+                        echo "===================================================="
+                        echo "Test Stage"
+                        echo "===================================================="
+                        sh "mvn test"
+                    }
+                }
+                stage('Analyse') {
+                    when {
+                        not {
+                            expression {
+                                branch_is_feature()
+                            }
+                        }
+                    }
+                    steps {
+                        echo "===================================================="
+                        echo "Analyse Stage"
+                        echo "===================================================="
+//                        withSonarQubeEnv('Sonar') {
+//                            sh "mvn sonar:sonar"
+//
+//                        }
+                    }
+                }
+                stage('Quality Gate') {
+                    when {
+                        not {
+                            expression {
+                                branch_is_feature()
+                            }
+                        }
+                    }
+                    steps {
+                        echo "===================================================="
+                        echo "Quality Gate Stage"
+                        echo "===================================================="
+//                        script {
+//                            timeout(time: 1, unit: 'HOURS') {
+//                                def qg = waitForQualityGate()
+//                                if (qg.status != 'OK') {
+//                                    error "Pipeline aborted due to quality gate failure: ${qg.status}"
+//                                }
+//                            }
+//                        }
+                    }
+                }
+                stage('Archive') {
+                    when {
+                        expression {
+                            branch_is_master_hotfix()
+                        }
+                    }
+                    steps {
+                        echo "===================================================="
+                        echo "Archive Stage"
+                        echo "===================================================="
+                        sh 'mvn deploy -Dmaven.test.skip=true'
+                    }
+                }
+                stage('Release') {
+                    // input {
+                    //     message "Pode continuar?"
+                    //     ok "Sim"
+                    //     submitter "jenkins-admin"
+                    // }
+                    when {
+                        expression {
+                            branch_is_master_hotfix() && different_versions()
+                        }
+                    }
+                    steps {
+                        echo "===================================================="
+                        echo "Release Stage"
+                        echo "===================================================="
+                        sh 'mvn -B release:prepare release:perform -DreleaseVersion=${version} -DdevelopmentVersion=${next_version}'
+                    }
+                }
+                stage('Docker') {
+                    when {
+                        expression {
+                            branch_is_master_hotfix() && different_versions()
+                        }
+                    }
+                    //step
+                }
+            }
+            post {
+                always {
+                    deleteDir()
+                }
+            }
+        }
+    } else {
+        if(tag_name == null || tag_name == "") {
+            echo "O parâmetro tag_name é obrigatório!"
+            currentBuild.result = 'FAILURE'
+        } else {
+            pipeline {
+                agent any
+                stages {
+                    stage('Checkout') {
+                        steps {
+                            echo "===================================================="
+                            echo "Checkout Stage"
+                            echo "===================================================="
+                            echo 'tag_name = ' + tag_name
+                            sh 'git checkout ' + tag_name
+                        }
+                    }
+                    stage('Docker') {
+                        // input {
+                        //     message "Pode continuar?"
+                        //     ok "Sim"
+                        //     submitter "jenkins-admin"
+                        // }
+                        //step
+                    }
+                }
+                post {
+                    always {
+                        deleteDir()
+                    }
                 }
             }
         }
@@ -55,7 +221,7 @@ def Boolean branch_is_hotfix() {
 }
 
 def Boolean test_branch_name(branch) {
-    return env.BRANCH_NAME.startsWith(branch)
+    return branch_name.startsWith(branch)
 }
 
 def Boolean branch_is_master_hotfix() {
@@ -63,5 +229,5 @@ def Boolean branch_is_master_hotfix() {
 }
 
 def Boolean different_versions() {
-    return VERSION != NEXT_VERSION;
+    return version != next_version
 }
