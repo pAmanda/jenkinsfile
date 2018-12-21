@@ -1,8 +1,8 @@
-environment = ''
-next_version = ''
-version = ''
-tag_name = ''
-branch_name = ''
+def environment = ''
+def next_version = ''
+def version = ''
+def tag_name = ''
+def branch_name = ''
 
 def call(body) {
 
