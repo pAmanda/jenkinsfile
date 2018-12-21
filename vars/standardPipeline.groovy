@@ -1,8 +1,8 @@
-def environment = ''
-def next_version = ''
-def version = ''
-def tag_name = ''
-def branch_name = ''
+environment = ''
+next_version = ''
+version = ''
+tag_name = ''
+branch_name = ''
 
 def call(body) {
 
@@ -10,8 +10,13 @@ def call(body) {
     def cabal = CABAL
     println("CABAL: " + cabal)
 
-    if(environment?.trim()) {
+    if(cabal?.trim()) {
         environment = 'default'
+        environment = ''
+        next_version = ''
+        version = ''
+        tag_name = ''
+        branch_name = ''
 
     } else {
         def parameters = cabal.split(';')
