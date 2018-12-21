@@ -60,6 +60,7 @@ def call(body) {
                         echo "===================================================="
                         script {
                             if(branch_name?.trim()) {
+                                echo "branch é null"
                                 branch_name = get_branch_name(GIT_BRANCH)
                             } else {
                                 branch_name = get_branch_name(branch_name)
