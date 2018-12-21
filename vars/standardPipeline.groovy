@@ -6,8 +6,6 @@ branch_name = ''
 
 def call(body) {
 
-    println("GIT_BRANCH: " + GIT_BRANCH)
-
     // Pega a variável CABAL passada como parâmetro e extrai as variáveis internas importantes.
     def cabal = CABAL
     def parameters = cabal.split(';')
