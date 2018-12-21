@@ -11,7 +11,7 @@ def call(body) {
     def parameters = cabal.split(';')
     def map = [:]
 
-    println("CABAL: " + cabal)
+    println("CABAL: " + cabal.trim())
 
     for(int i = 0; i < parameters.size(); i++) {
         println("Parâmetro " + i + ": " + parameters[i])
@@ -30,7 +30,6 @@ def call(body) {
     def commit_message = null
     node {
         deleteDir()
-        sh 'git --version'
         checkout scm
         commit_message = sh (script: 'git log -1 --pretty=%B',returnStdout: true).trim()
     }
