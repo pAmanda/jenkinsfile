@@ -32,6 +32,8 @@ def call(body) {
         branch_name = map.get('BRANCH_NAME')
     }
 
+    println((null == false).toString())
+
     println("environment: " + environment + " next_version: " + next_version + " version: " + version + " tag_name: " + tag_name + " branch_name: " + branch_name)
 
     def commit_message = null
