@@ -12,7 +12,6 @@ def call(body) {
 
     if(cabal?.trim()) {
         environment = 'default'
-        environment = ''
         next_version = ''
         version = ''
         tag_name = ''
