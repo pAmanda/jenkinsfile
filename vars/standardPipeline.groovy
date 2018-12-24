@@ -1,12 +1,12 @@
 def call(body) {
 
     //Pega a variável CABAL passada como parâmetro e extrai as variáveis internas importantes.
-    String cabal = CABAL
-    String environment = 'default'
-    String next_version = ''
-    String version = ''
-    String tag_name = ''
-    String branch_name = ''
+    def cabal = CABAL
+    def environment = 'default'
+    def nextVersion = ''
+    def version = ''
+    def tagName = ''
+    def branchName = ''
 
 
     if(!cabal?.trim()) {
@@ -21,22 +21,22 @@ def call(body) {
             map.put(param[0].trim(), param[1].trim())
         }
         environment = map.get('ENVIRONMENT')
-        next_version = map.get('NEXT_VERSION')
+        nextVersion = map.get('nextVersion')
         version = map.get('VERSION')
-        tag_name = map.get('TAG_NAME')
-        branch_name = map.get('BRANCH_NAME')
+        tagName = map.get('tagName')
+        branchName = map.get('branchName')
     }
 
-    println("environment: " + environment + " next_version: " + next_version + " version: " + version + " tag_name: " + tag_name + " branch_name: " + branch_name)
+    println("environment: " + environment + " nextVersion: " + nextVersion + " version: " + version + " tagName: " + tagName + " branchName: " + branchName)
 
-    def commit_message = null
+    def commitMessage = null
     node {
         deleteDir()
         checkout scm
-        commit_message = sh (script: 'git log -1 --pretty=%B',returnStdout: true).trim()
+        commitMessage = sh (script: 'git log -1 --pretty=%B',returnStdout: true).trim()
     }
 
-    if (commit_message.startsWith("[maven-release-plugin]") && environment != 'production') {
+    if (commitMessage.startsWith("[maven-release-plugin]") && environment != 'production') {
         currentBuild.result = 'SUCCESS'
         echo "Commit message starts with maven-release-plugin. Exiting..."
 
@@ -55,12 +55,12 @@ def call(body) {
                         echo "===================================================="
                         script {
                             //Quando a branch vem nula, o null é tratado como String.
-                            branch_name = (branch_name != 'null' && !branch_name.isEmpty()) ? get_branch_name(branch_name) : get_branch_name(GIT_BRANCH)
+                            branchName = (branchName != 'null' && !branchName.isEmpty()) ? getBranchName(branchName) : getBranchName(GIT_BRANCH)
 
                         }
-                        echo "BRANCH_NAME = " + branch_name
-                        echo "PARAMETERS = VERSION: " + version + " e NEXT_VERSION: " + next_version
-                        sh 'git checkout ' + branch_name
+                        echo "branchName = " + branchName
+                        echo "PARAMETERS = VERSION: " + version + " e nextVersion: " + nextVersion
+                        sh 'git checkout ' + branchName
                     }
                 }
                 stage('Build') {
@@ -75,7 +75,7 @@ def call(body) {
                     when {
                         not {
                             expression {
-                                branch_is_feature(branch_name)
+                                branchIsFeature(branchName)
                             }
                         }
                     }
@@ -90,7 +90,7 @@ def call(body) {
                     when {
                         not {
                             expression {
-                                branch_is_feature(branch_name)
+                                branchIsFeature(branchName)
                             }
                         }
                     }
@@ -98,17 +98,17 @@ def call(body) {
                         echo "===================================================="
                         echo "Analyse Stage"
                         echo "===================================================="
-//                        withSonarQubeEnv('Sonar') {
-//                            sh "mvn sonar:sonar"
-//
-//                        }
+                        withSonarQubeEnv('Sonar') {
+                            sh "mvn sonar:sonar"
+
+                        }
                     }
                 }
                 stage('Quality Gate') {
                     when {
                         not {
                             expression {
-                                branch_is_feature(branch_name)
+                                branchIsFeature(branchName)
                             }
                         }
                     }
@@ -116,20 +116,20 @@ def call(body) {
                         echo "===================================================="
                         echo "Quality Gate Stage"
                         echo "===================================================="
-//                        script {
-//                            timeout(time: 1, unit: 'HOURS') {
-//                                def qg = waitForQualityGate()
-//                                if (qg.status != 'OK') {
-//                                    error "Pipeline aborted due to quality gate failure: ${qg.status}"
-//                                }
-//                            }
-//                        }
+                        script {
+                            timeout(time: 1, unit: 'HOURS') {
+                                def qg = waitForQualityGate()
+                                if (qg.status != 'OK') {
+                                    error "Pipeline aborted due to quality gate failure: ${qg.status}"
+                                }
+                            }
+                        }
                     }
                 }
                 stage('Archive') {
                     when {
                         expression {
-                            branch_is_master_hotfix(branch_name)
+                            branchIsMasterHotfix(branchName)
                         }
                     }
                     steps {
@@ -147,33 +147,34 @@ def call(body) {
                     // }
                     when {
                         expression {
-                            branch_is_master_hotfix(branch_name) && version?.trim() && next_version?.trim()
+                            branchIsMasterHotfix(branchName) && version?.trim() && nextVersion?.trim()
                         }
                     }
                     steps {
                         echo "===================================================="
                         echo "Release Stage"
                         echo "===================================================="
-                        sh 'mvn -B release:prepare release:perform -DreleaseVersion=${version} -DdevelopmentVersion=${next_version}'
+                        sh 'mvn -B release:prepare release:perform -DreleaseVersion=${version} -DdevelopmentVersion=${nextVersion}'
                     }
                 }
                 stage('Docker') {
                     when {
                         expression {
-                            branch_is_master_hotfix(branch_name) && version?.trim() && next_version?.trim()
+                            branchIsMasterHotfix(branchName) && version?.trim() && nextVersion?.trim()
                         }
                     }
                     steps {
-                        echo "DOCKER"
+                        echo "===================================================="
+                        echo "Docker Stage"
+                        echo "===================================================="
                     }
-                    //step
                 }
             }
         }
     } else {
         //Quando a tag vem nula, o null é tratado como String.
-        if(tag_name == 'null' || tag_name.isEmpty()) {
-            echo "O parâmetro tag_name é obrigatório!"
+        if(tagName == 'null' || tagName.isEmpty()) {
+            echo "O parâmetro tagName é obrigatório!"
             currentBuild.result = 'FAILURE'
         } else {
             pipeline {
@@ -184,8 +185,8 @@ def call(body) {
                             echo "===================================================="
                             echo "Checkout Stage"
                             echo "===================================================="
-                            echo 'tag_name = ' + tag_name
-                            sh 'git checkout ' + tag_name
+                            echo 'tagName = ' + tagName
+                            sh 'git checkout ' + tagName
                         }
                     }
                     stage('Docker') {
@@ -194,9 +195,10 @@ def call(body) {
                         //     ok "Sim"
                         //     submitter "jenkins-admin"
                         // }
-                        //step
                         steps {
-                            echo "DOCKER"
+                            echo "===================================================="
+                            echo "Docker Stage"
+                            echo "===================================================="
                         }
                     }
                 }
@@ -205,26 +207,26 @@ def call(body) {
     }
 }
 
-def String get_branch_name(branch_name) {
-    return branch_name.replaceAll("origin/", "").trim()
+def String getBranchName(branchName) {
+    return branchName.replaceAll("origin/", "").trim()
 }
 
-def Boolean branch_is_feature(branch_name) {
-    return test_branch_name("feature/", branch_name)
+def Boolean branchIsFeature(branchName) {
+    return testBranchName("feature/", branchName)
 }
 
-def Boolean branch_is_master(branch_name) {
-    return test_branch_name("master", branch_name)
+def Boolean branchIsMaster(branchName) {
+    return testBranchName("master", branchName)
 }
 
-def Boolean branch_is_hotfix(branch_name) {
-    return test_branch_name("hotfix/", branch_name)
+def Boolean branchIsHotfix(branchName) {
+    return testBranchName("hotfix/", branchName)
 }
 
-def Boolean test_branch_name(branch_to_test, branch_name) {
-    return branch_name.startsWith(branch_to_test)
+def Boolean testBranchName(branchTest, branchName) {
+    return branchName.startsWith(branchTest)
 }
 
-def Boolean branch_is_master_hotfix(branch_name) {
-    return branch_is_master(branch_name) || branch_is_hotfix(branch_name)
+def Boolean branchIsMasterHotfix(branchName) {
+    return branchIsMaster(branchName) || branchIsHotfix(branchName)
 }
