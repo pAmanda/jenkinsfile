@@ -1,12 +1,12 @@
 def call(body) {
 
-    // Pega a variável CABAL passada como parâmetro e extrai as variáveis internas importantes.
-    def cabal = CABAL
-    def environment = 'default'
-    def next_version = ''
-    def version = ''
-    def tag_name = ''
-    def branch_name = ''
+    //Pega a variável CABAL passada como parâmetro e extrai as variáveis internas importantes.
+    String cabal = CABAL
+    String environment = 'default'
+    String next_version = ''
+    String version = ''
+    String tag_name = ''
+    String branch_name = ''
 
 
     if(!cabal?.trim()) {
@@ -31,6 +31,7 @@ def call(body) {
 
     def commit_message = null
     node {
+        deleteDir()
         checkout scm
         commit_message = sh (script: 'git log -1 --pretty=%B',returnStdout: true).trim()
     }
@@ -55,7 +56,6 @@ def call(body) {
                         script {
 //                            branch_name = !branch_name?.trim() ? get_branch_name(GIT_BRANCH) : get_branch_name(branch_name)
                             echo "BRANCH_NAME É : " + branch_name + " e " + !branch_name?.trim() + " e " + branch_name?.trim()
-                            branch_name = 'master'
                             if(branch_name == null || branch_name == '') {
                                 echo "branch é null"
                                 branch_name = get_branch_name(GIT_BRANCH)
@@ -69,117 +69,112 @@ def call(body) {
                         sh 'git checkout ' + branch_name
                     }
                 }
-//                stage('Build') {
-//                    steps {
-//                        echo "===================================================="
-//                        echo "Build Stage"
-//                        echo "===================================================="
-//                        sh "mvn clean install -Dmaven.test.skip=true -Dmaven.javadoc.skip=true"
-//                    }
-//                }
-//                stage('Test') {
-//                    when {
-//                        not {
-//                            expression {
-//                                branch_is_feature(branch_name)
+                stage('Build') {
+                    steps {
+                        echo "===================================================="
+                        echo "Build Stage"
+                        echo "===================================================="
+                        sh "mvn clean install -Dmaven.test.skip=true -Dmaven.javadoc.skip=true"
+                    }
+                }
+                stage('Test') {
+                    when {
+                        not {
+                            expression {
+                                branch_is_feature(branch_name)
+                            }
+                        }
+                    }
+                    steps {
+                        echo "===================================================="
+                        echo "Test Stage"
+                        echo "===================================================="
+                        sh "mvn test"
+                    }
+                }
+                stage('Analyse') {
+                    when {
+                        not {
+                            expression {
+                                branch_is_feature(branch_name)
+                            }
+                        }
+                    }
+                    steps {
+                        echo "===================================================="
+                        echo "Analyse Stage"
+                        echo "===================================================="
+//                        withSonarQubeEnv('Sonar') {
+//                            sh "mvn sonar:sonar"
+//
+//                        }
+                    }
+                }
+                stage('Quality Gate') {
+                    when {
+                        not {
+                            expression {
+                                branch_is_feature(branch_name)
+                            }
+                        }
+                    }
+                    steps {
+                        echo "===================================================="
+                        echo "Quality Gate Stage"
+                        echo "===================================================="
+//                        script {
+//                            timeout(time: 1, unit: 'HOURS') {
+//                                def qg = waitForQualityGate()
+//                                if (qg.status != 'OK') {
+//                                    error "Pipeline aborted due to quality gate failure: ${qg.status}"
+//                                }
 //                            }
 //                        }
-//                    }
-//                    steps {
-//                        echo "===================================================="
-//                        echo "Test Stage"
-//                        echo "===================================================="
-//                        sh "mvn test"
-//                    }
-//                }
-//                stage('Analyse') {
-//                    when {
-//                        not {
-//                            expression {
-//                                branch_is_feature(branch_name)
-//                            }
-//                        }
-//                    }
-//                    steps {
-//                        echo "===================================================="
-//                        echo "Analyse Stage"
-//                        echo "===================================================="
-////                        withSonarQubeEnv('Sonar') {
-////                            sh "mvn sonar:sonar"
-////
-////                        }
-//                    }
-//                }
-//                stage('Quality Gate') {
-//                    when {
-//                        not {
-//                            expression {
-//                                branch_is_feature(branch_name)
-//                            }
-//                        }
-//                    }
-//                    steps {
-//                        echo "===================================================="
-//                        echo "Quality Gate Stage"
-//                        echo "===================================================="
-////                        script {
-////                            timeout(time: 1, unit: 'HOURS') {
-////                                def qg = waitForQualityGate()
-////                                if (qg.status != 'OK') {
-////                                    error "Pipeline aborted due to quality gate failure: ${qg.status}"
-////                                }
-////                            }
-////                        }
-//                    }
-//                }
-//                stage('Archive') {
-//                    when {
-//                        expression {
-//                            branch_is_master_hotfix(branch_name)
-//                        }
-//                    }
-//                    steps {
-//                        echo "===================================================="
-//                        echo "Archive Stage"
-//                        echo "===================================================="
-//                        sh 'mvn deploy -Dmaven.test.skip=true'
-//                    }
-//                }
-//                stage('Release') {
-//                    // input {
-//                    //     message "Pode continuar?"
-//                    //     ok "Sim"
-//                    //     submitter "jenkins-admin"
-//                    // }
-//                    when {
-//                        expression {
-//                            branch_is_master_hotfix(branch_name) && version?.trim() && next_version?.trim()
-//                        }
-//                    }
-//                    steps {
-//                        echo "===================================================="
-//                        echo "Release Stage"
-//                        echo "===================================================="
-//                        sh 'mvn -B release:prepare release:perform -DreleaseVersion=${version} -DdevelopmentVersion=${next_version}'
-//                    }
-//                }
-//                stage('Docker') {
-//                    when {
-//                        expression {
-//                            branch_is_master_hotfix(branch_name) && version?.trim() && next_version?.trim()
-//                        }
-//                    }
-//                    steps {
-//                        echo "DOCKER"
-//                    }
-//                    //step
-//                }
+                    }
+                }
+                stage('Archive') {
+                    when {
+                        expression {
+                            branch_is_master_hotfix(branch_name)
+                        }
+                    }
+                    steps {
+                        echo "===================================================="
+                        echo "Archive Stage"
+                        echo "===================================================="
+                        sh 'mvn deploy -Dmaven.test.skip=true'
+                    }
+                }
+                stage('Release') {
+                    // input {
+                    //     message "Pode continuar?"
+                    //     ok "Sim"
+                    //     submitter "jenkins-admin"
+                    // }
+                    when {
+                        expression {
+                            branch_is_master_hotfix(branch_name) && version?.trim() && next_version?.trim()
+                        }
+                    }
+                    steps {
+                        echo "===================================================="
+                        echo "Release Stage"
+                        echo "===================================================="
+                        sh 'mvn -B release:prepare release:perform -DreleaseVersion=${version} -DdevelopmentVersion=${next_version}'
+                    }
+                }
+                stage('Docker') {
+                    when {
+                        expression {
+                            branch_is_master_hotfix(branch_name) && version?.trim() && next_version?.trim()
+                        }
+                    }
+                    steps {
+                        echo "DOCKER"
+                    }
+                    //step
+                }
             }
-//            post {
-//                always {
-//                    deleteDir()
-//                }
-//            }
         }
     } else {
         if(tag_name == null || tag_name == '') {
@@ -210,11 +205,6 @@ def call(body) {
                         }
                     }
                 }
-//                post {
-//                    always {
-//                        deleteDir()
-//                    }
-//                }
             }
         }
     }
