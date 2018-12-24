@@ -1,4 +1,4 @@
-def call() {
+def call(body) {
     def buildNumber = 2
     if (buildNumber % 2 == 0) {
         pipeline {
