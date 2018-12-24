@@ -185,8 +185,7 @@ def call(body) {
                     deleteDir()
                 }
             }
-        }
-    } else {
+        } else {
         if(tag_name == null || tag_name == '') {
             echo "O parâmetro tag_name é obrigatório!"
             currentBuild.result = 'FAILURE'
