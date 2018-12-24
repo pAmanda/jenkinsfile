@@ -9,7 +9,7 @@ def call(body) {
     // Pega a variável CABAL passada como parâmetro e extrai as variáveis internas importantes.
     def cabal = CABAL
     def test = null
-    println("CABAL: " + cabal + "Bool: " + test?.trim())
+    println("CABAL: " + cabal + "Bool: " + !test?.trim())
 
     if(!cabal?.trim()) {
         environment = 'default'
