@@ -56,12 +56,11 @@ def call(body) {
                         script {
 //                            branch_name = !branch_name?.trim() ? get_branch_name(GIT_BRANCH) : get_branch_name(branch_name)
                             echo "Tipó: " + branch_name.getClass()
-                            echo "BRANCH_NAME É : " + branch_name + " e " + !branch_name?.trim() + " e " + branch_name?.trim()
-                            if(branch_name == null || branch_name == '') {
+                            if(branch_name != null && !branch_name.isEmpty()) {
+                                branch_name = get_branch_name(branch_name)
+                            } else {
                                 echo "branch é null"
                                 branch_name = get_branch_name(GIT_BRANCH)
-                            } else {
-                                branch_name = get_branch_name(branch_name)
                             }
                         }
                         echo "GIT_BRANCH = " + GIT_BRANCH
