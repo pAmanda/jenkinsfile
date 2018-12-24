@@ -11,7 +11,7 @@ def call(body) {
     def test = null
     println("CABAL: " + cabal + "Bool: " + !test?.trim())
 
-    if(cabal?.trim()) {
+    if(!cabal?.trim()) {
         environment = 'default'
         next_version = ''
         version = ''
@@ -32,7 +32,7 @@ def call(body) {
         tag_name = map.get('TAG_NAME')
         branch_name = map.get('BRANCH_NAME')
     }
-    println((null == false).toString())
+    println((null == true).toString())
 
     println("environment: " + environment + " next_version: " + next_version + " version: " + version + " tag_name: " + tag_name + " branch_name: " + branch_name)
 
@@ -61,7 +61,7 @@ def call(body) {
                         echo "Checkout Stage"
                         echo "===================================================="
                         script {
-                            if(branch_name?.trim()) {
+                            if(!branch_name?.trim()) {
                                 echo "branch é null"
                                 branch_name = get_branch_name(GIT_BRANCH)
                             } else {
