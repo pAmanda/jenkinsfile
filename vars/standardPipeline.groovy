@@ -29,17 +29,18 @@ def call(body) {
 
     println("environment: " + environment + " next_version: " + next_version + " version: " + version + " tag_name: " + tag_name + " branch_name: " + branch_name)
 
-    def commit_message = null
-    node {
-        checkout scm
-        commit_message = sh (script: 'git log -1 --pretty=%B',returnStdout: true).trim()
-    }
-
-    if (commit_message.startsWith("[maven-release-plugin]")) {
-        currentBuild.result = 'SUCCESS'
-        echo "Commit message starts with maven-release-plugin. Exiting..."
-
-    } else if(environment == 'staging' || environment == 'default') {
+//    def commit_message = null
+//    node {
+//        checkout scm
+//        commit_message = sh (script: 'git log -1 --pretty=%B',returnStdout: true).trim()
+//    }
+//
+//    if (commit_message.startsWith("[maven-release-plugin]")) {
+//        currentBuild.result = 'SUCCESS'
+//        echo "Commit message starts with maven-release-plugin. Exiting..."
+//
+//    } else
+       if(environment == 'staging' || environment == 'default') {
         pipeline {
             agent any
             tools {
