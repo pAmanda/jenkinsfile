@@ -54,6 +54,7 @@ def call(body) {
                         echo "===================================================="
                         script {
 //                            branch_name = !branch_name?.trim() ? get_branch_name(GIT_BRANCH) : get_branch_name(branch_name)
+                            branch_name = "master"
                             echo "BRANCH_NAME É : " + branch_name + " e " + !branch_name?.trim() + " e " + branch_name?.trim()
                             if(branch_name == null || branch_name == '') {
                                 echo "branch é null"
