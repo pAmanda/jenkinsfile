@@ -54,7 +54,7 @@ def call(body) {
                         echo "Checkout Stage"
                         echo "===================================================="
                         script {
-                            StringUtils
+
 //                            branch_name = !branch_name?.trim() ? get_branch_name(GIT_BRANCH) : get_branch_name(branch_name)
                             branch_name = "Teste"
                             echo "Tipó: " + branch_name.getClass() + " " + !branch_name?.trim()
