@@ -5,10 +5,12 @@ tag_name = ''
 branch_name = ''
 test = null
 
+
 def call(body) {
 
     // Pega a variável CABAL passada como parâmetro e extrai as variáveis internas importantes.
     def cabal = CABAL
+    test = null
     println("CABAL: " + cabal + "Bool: " + !test?.trim())
 
     if(!cabal?.trim()) {
