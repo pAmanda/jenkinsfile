@@ -28,8 +28,6 @@ def call(body) {
     }
 
     println("environment: " + environment + " next_version: " + next_version + " version: " + version + " tag_name: " + tag_name + " branch_name: " + branch_name)
-    branch_name = "TEst"
-    println("Novo Test: " + !branch_name?.trim())
 
     def commit_message = null
     node {
@@ -56,11 +54,7 @@ def call(body) {
                         echo "Checkout Stage"
                         echo "===================================================="
                         script {
-
-//                            branch_name = !branch_name?.trim() ? get_branch_name(GIT_BRANCH) : get_branch_name(branch_name)
-                            branch_name = "Teste"
-                            echo "Tipó: " + branch_name.getClass() + " " + !branch_name?.trim()
-                            if(branch_name != null && !branch_name.isEmpty()) {
+                            if(branch_name != 'null' && !branch_name.isEmpty()) {
                                 echo "branch não é null"
                                 branch_name = get_branch_name(branch_name)
                             } else {
