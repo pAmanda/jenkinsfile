@@ -28,6 +28,7 @@ def call(body) {
     }
 
     println("environment: " + environment + " next_version: " + next_version + " version: " + version + " tag_name: " + tag_name + " branch_name: " + branch_name)
+    println("Novo Test: " + !branch_name?.trim())
 
     def commit_message = null
     node {
