@@ -58,7 +58,6 @@ def call(body) {
                             branch_name = (branch_name != 'null' && !branch_name.isEmpty()) ? get_branch_name(branch_name) : get_branch_name(GIT_BRANCH)
 
                         }
-                        echo "GIT_BRANCH = " + GIT_BRANCH
                         echo "BRANCH_NAME = " + branch_name
                         echo "PARAMETERS = VERSION: " + version + " e NEXT_VERSION: " + next_version
                         sh 'git checkout ' + branch_name
@@ -172,7 +171,7 @@ def call(body) {
             }
         }
     } else {
-        if(tag_name == null || tag_name == '') {
+        if(tag_name == 'null' || tag_name.isEmpty()) {
             echo "O parâmetro tag_name é obrigatório!"
             currentBuild.result = 'FAILURE'
         } else {
