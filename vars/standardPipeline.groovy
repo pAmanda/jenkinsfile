@@ -54,15 +54,9 @@ def call(body) {
                         echo "Checkout Stage"
                         echo "===================================================="
                         script {
-
                             //Quando a branch vem nula, o null é tratado como String.
-                            if(branch_name != 'null' && !branch_name.isEmpty()) {
-                                echo "branch não é null"
-                                branch_name = get_branch_name(branch_name)
-                            } else {
-                                echo "branch é null"
-                                branch_name = get_branch_name(GIT_BRANCH)
-                            }
+                            branch_name = (branch_name != 'null' && !branch_name.isEmpty()) ? get_branch_name(branch_name) : get_branch_name(GIT_BRANCH)
+
                         }
                         echo "GIT_BRANCH = " + GIT_BRANCH
                         echo "BRANCH_NAME = " + branch_name
