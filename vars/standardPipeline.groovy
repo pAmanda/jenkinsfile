@@ -1,24 +1,16 @@
-environment = ''
-next_version = ''
-version = ''
-tag_name = ''
-branch_name = ''
-test = null
-
-
 def call(body) {
 
     // Pega a variável CABAL passada como parâmetro e extrai as variáveis internas importantes.
     def cabal = CABAL
-    test = null
-    println("CABAL: " + cabal + "Bool: " + !test?.trim())
+    def environment = 'default'
+    def next_version = ''
+    def version = ''
+    def tag_name = ''
+    def branch_name = ''
+
 
     if(!cabal?.trim()) {
         environment = 'default'
-        next_version = ''
-        version = ''
-        tag_name = ''
-        branch_name = ''
 
     } else {
         def parameters = cabal.split(';')
@@ -64,7 +56,7 @@ def call(body) {
                         script {
 //                            branch_name = !branch_name?.trim() ? get_branch_name(GIT_BRANCH) : get_branch_name(branch_name)
                             echo "BRANCH_NAME É : " + branch_name + " e " + !branch_name?.trim() + " e " + branch_name?.trim()
-                            if(branch_name == null || branch_name.trim() == '') {
+                            if(branch_name == null || branch_name == '') {
                                 echo "branch é null"
                                 branch_name = get_branch_name(GIT_BRANCH)
                             } else {
@@ -89,7 +81,7 @@ def call(body) {
                     when {
                         not {
                             expression {
-                                branch_is_feature()
+                                branch_is_feature(branch_name)
                             }
                         }
                     }
@@ -104,7 +96,7 @@ def call(body) {
                     when {
                         not {
                             expression {
-                                branch_is_feature()
+                                branch_is_feature(branch_name)
                             }
                         }
                     }
@@ -122,7 +114,7 @@ def call(body) {
                     when {
                         not {
                             expression {
-                                branch_is_feature()
+                                branch_is_feature(branch_name)
                             }
                         }
                     }
@@ -143,7 +135,7 @@ def call(body) {
                 stage('Archive') {
                     when {
                         expression {
-                            branch_is_master_hotfix()
+                            branch_is_master_hotfix(branch_name)
                         }
                     }
                     steps {
@@ -161,7 +153,7 @@ def call(body) {
                     // }
                     when {
                         expression {
-                            branch_is_master_hotfix() && version?.trim() && next_version?.trim()
+                            branch_is_master_hotfix(branch_name) && version?.trim() && next_version?.trim()
                         }
                     }
                     steps {
@@ -174,7 +166,7 @@ def call(body) {
                 stage('Docker') {
                     when {
                         expression {
-                            branch_is_master_hotfix() && version?.trim() && next_version?.trim()
+                            branch_is_master_hotfix(branch_name) && version?.trim() && next_version?.trim()
                         }
                     }
                     steps {
@@ -232,22 +224,22 @@ def String get_branch_name(branch_name) {
     return branch_name.replaceAll("origin/", "").trim()
 }
 
-def Boolean branch_is_feature() {
-    return test_branch_name("feature/")
+def Boolean branch_is_feature(branch_name) {
+    return test_branch_name("feature/", branch_name)
 }
 
-def Boolean branch_is_master() {
-    return test_branch_name("master")
+def Boolean branch_is_master(branch_name) {
+    return test_branch_name("master", branch_name)
 }
 
-def Boolean branch_is_hotfix() {
-    return test_branch_name("hotfix/")
+def Boolean branch_is_hotfix(branch_name) {
+    return test_branch_name("hotfix/", branch_name)
 }
 
-def Boolean test_branch_name(branch) {
-    return branch_name.startsWith(branch)
+def Boolean test_branch_name(branch_to_test, branch_name) {
+    return branch_name.startsWith(branch_to_test)
 }
 
-def Boolean branch_is_master_hotfix() {
-    return branch_is_master() || branch_is_hotfix()
+def Boolean branch_is_master_hotfix(branch_name) {
+    return branch_is_master(branch_name) || branch_is_hotfix(branch_name)
 }
