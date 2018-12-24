@@ -67,7 +67,7 @@ def call(body) {
 //                            } else {
 //                                branch_name = get_branch_name(branch_name)
 //                            }
-                        }
+//                        }
                         echo "GIT_BRANCH = " + GIT_BRANCH
                         echo "BRANCH_NAME = " + branch_name
                         echo "PARAMETERS = VERSION: " + version + " e NEXT_VERSION: " + next_version
@@ -185,7 +185,8 @@ def call(body) {
                     deleteDir()
                 }
             }
-        } else {
+        }
+    } else {
         if(tag_name == null || tag_name == '') {
             echo "O parâmetro tag_name é obrigatório!"
             currentBuild.result = 'FAILURE'
