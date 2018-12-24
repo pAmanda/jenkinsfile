@@ -175,11 +175,11 @@ def call(body) {
 //                    //step
 //                }
             }
-            post {
-                always {
-                    deleteDir()
-                }
-            }
+//            post {
+//                always {
+//                    deleteDir()
+//                }
+//            }
         }
     } else {
         if(tag_name == null || tag_name == '') {
@@ -210,11 +210,11 @@ def call(body) {
                         }
                     }
                 }
-                post {
-                    always {
-                        deleteDir()
-                    }
-                }
+//                post {
+//                    always {
+//                        deleteDir()
+//                    }
+//                }
             }
         }
     }
