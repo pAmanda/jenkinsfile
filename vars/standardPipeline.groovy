@@ -31,7 +31,6 @@ def call(body) {
 
     def commit_message = null
     node {
-        deleteDir()
         checkout scm
         commit_message = sh (script: 'git log -1 --pretty=%B',returnStdout: true).trim()
     }
