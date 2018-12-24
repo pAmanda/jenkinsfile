@@ -8,7 +8,7 @@ def call(body) {
 
     // Pega a variável CABAL passada como parâmetro e extrai as variáveis internas importantes.
     def cabal = CABAL
-    def test = "Amanda"
+    def test = null
     println("CABAL: " + cabal + "Bool: " + !test?.trim())
 
     if(!cabal?.trim()) {
@@ -61,7 +61,7 @@ def call(body) {
                         echo "===================================================="
                         script {
 //                            branch_name = !branch_name?.trim() ? get_branch_name(GIT_BRANCH) : get_branch_name(branch_name)
-                            echo "BRANCH_NAME É : " + branch_name + " e " + !branch_name?.trim()
+                            echo "BRANCH_NAME É : " + branch_name + " e " + !branch_name?.trim() + " e " + branch_name?.trim()
                             if(!branch_name?.trim()) {
                                 echo "branch é null"
                                 branch_name = get_branch_name(GIT_BRANCH)
