@@ -36,7 +36,7 @@ def call(body) {
         commit_message = sh (script: 'git log -1 --pretty=%B',returnStdout: true).trim()
     }
 
-    if (commit_message.startsWith("[maven-release-plugin]")) {
+    if (commit_message.startsWith("[maven-release-plugin]") && environment != 'production') {
         currentBuild.result = 'SUCCESS'
         echo "Commit message starts with maven-release-plugin. Exiting..."
 
@@ -171,6 +171,7 @@ def call(body) {
             }
         }
     } else {
+        //Quando a tag vem nula, o null é tratado como String.
         if(tag_name == 'null' || tag_name.isEmpty()) {
             echo "O parâmetro tag_name é obrigatório!"
             currentBuild.result = 'FAILURE'
