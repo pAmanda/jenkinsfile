@@ -54,6 +54,8 @@ def call(body) {
                         echo "Checkout Stage"
                         echo "===================================================="
                         script {
+                            branch_name = null
+                            echo "Test: " + !branch_name?.trim()
                             if(branch_name != 'null' && !branch_name.isEmpty()) {
                                 echo "branch não é null"
                                 branch_name = get_branch_name(branch_name)
