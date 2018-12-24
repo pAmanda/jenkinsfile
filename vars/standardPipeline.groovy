@@ -59,15 +59,16 @@ def call(body) {
                         echo "===================================================="
                         echo "Checkout Stage"
                         echo "===================================================="
-                        branch_name = !branch_name?.trim() ? get_branch_name(GIT_BRANCH) : get_branch_name(branch_name)
-//                        script {
+                        script {
+                            branch_name = !branch_name?.trim() ? get_branch_name(GIT_BRANCH) : get_branch_name(branch_name)
+
 //                            if(!branch_name?.trim()) {
 //                                echo "branch é null"
 //                                branch_name = get_branch_name(GIT_BRANCH)
 //                            } else {
 //                                branch_name = get_branch_name(branch_name)
 //                            }
-//                        }
+                        }
                         echo "GIT_BRANCH = " + GIT_BRANCH
                         echo "BRANCH_NAME = " + branch_name
                         echo "PARAMETERS = VERSION: " + version + " e NEXT_VERSION: " + next_version
