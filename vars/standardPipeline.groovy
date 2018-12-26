@@ -21,10 +21,10 @@ def call(body) {
             map.put(param[0].trim(), param[1].trim())
         }
         environment = map.get('ENVIRONMENT')
-        nextVersion = map.get('nextVersion')
+        nextVersion = map.get('NEXT_VERSION')
         version = map.get('VERSION')
-        tagName = map.get('tagName')
-        branchName = map.get('branchName')
+        tagName = map.get('TAG_NAME')
+        branchName = map.get('BRANCH_NAME')
     }
 
     println("environment: " + environment + " nextVersion: " + nextVersion + " version: " + version + " tagName: " + tagName + " branchName: " + branchName)
@@ -98,10 +98,10 @@ def call(body) {
                         echo "===================================================="
                         echo "Analyse Stage"
                         echo "===================================================="
-                        withSonarQubeEnv('Sonar') {
-                            sh "mvn sonar:sonar"
-
-                        }
+//                        withSonarQubeEnv('Sonar') {
+//                            sh "mvn sonar:sonar"
+//
+//                        }
                     }
                 }
                 stage('Quality Gate') {
@@ -116,14 +116,14 @@ def call(body) {
                         echo "===================================================="
                         echo "Quality Gate Stage"
                         echo "===================================================="
-                        script {
-                            timeout(time: 1, unit: 'HOURS') {
-                                def qg = waitForQualityGate()
-                                if (qg.status != 'OK') {
-                                    error "Pipeline aborted due to quality gate failure: ${qg.status}"
-                                }
-                            }
-                        }
+//                        script {
+//                            timeout(time: 1, unit: 'HOURS') {
+//                                def qg = waitForQualityGate()
+//                                if (qg.status != 'OK') {
+//                                    error "Pipeline aborted due to quality gate failure: ${qg.status}"
+//                                }
+//                            }
+//                        }
                     }
                 }
                 stage('Archive') {
