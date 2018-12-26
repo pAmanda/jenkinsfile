@@ -55,7 +55,7 @@ def call(body) {
                         echo "===================================================="
                         script {
                             //Quando a branch vem nula, o null é tratado como String.
-                            branchName = (branchName != null && !branchName.isEmpty()) ? getBranchName(branchName) : getBranchName(GIT_BRANCH)
+                            branchName = (branchName != null && branchName != 'null' && !branchName.isEmpty()) ? getBranchName(branchName) : getBranchName(GIT_BRANCH)
 
                         }
                         echo "branchName = " + branchName
