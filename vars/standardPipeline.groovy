@@ -16,7 +16,6 @@ def call(body) {
         def parameters = cabal.split(';')
         def map = [:]
         for(int i = 0; i < parameters.size(); i++) {
-            println("Parâmetro " + i + ": " + parameters[i])
             def param = parameters[i].split(':')
             map.put(param[0].trim(), param[1].trim())
         }
@@ -26,8 +25,6 @@ def call(body) {
         tagName = map.get('TAG_NAME')
         branchName = map.get('BRANCH_NAME')
     }
-
-    println("environment: " + environment + " nextVersion: " + nextVersion + " version: " + version + " tagName: " + tagName + " branchName: " + branchName)
 
     def commitMessage = null
     node {
