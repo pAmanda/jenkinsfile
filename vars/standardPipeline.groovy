@@ -56,7 +56,7 @@ def call(body) {
 
                         }
                         echo "branchName = " + branchName
-                        echo "PARAMETERS = VERSION: " + version + " e nextVersion: " + nextVersion
+                        echo "PARAMETERS = VERSION: " + version + " e NEXT_VERSION: " + nextVersion
                         sh 'git checkout ' + branchName
                     }
                 }
