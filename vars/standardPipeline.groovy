@@ -173,7 +173,7 @@ def call(body) {
         }
     } else {
         //Quando a tag vem nula, o null é tratado como String.
-        if(tagName == 'null' || tagName.isEmpty()) {
+        if(tagName == null || tagName == 'null' || tagName.isEmpty()) {
             echo "O parâmetro tagName é obrigatório!"
             currentBuild.result = 'FAILURE'
         } else {
