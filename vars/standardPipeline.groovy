@@ -1,7 +1,7 @@
 def call(body) {
 
-    //Pega a variável CABAL passada como parâmetro e extrai as variáveis internas importantes.
-    def cabal = CABAL
+    //Pega a variável env passada como parâmetro e extrai as variáveis internas importantes.
+    def env = ENV
     def environment = 'default'
     def nextVersion = ''
     def version = ''
@@ -9,11 +9,11 @@ def call(body) {
     def branchName = ''
 
 
-    if(!cabal?.trim()) {
+    if(!env?.trim()) {
         environment = 'default'
 
     } else {
-        def parameters = cabal.split(';')
+        def parameters = env.split(';')
         def map = [:]
         for(int i = 0; i < parameters.size(); i++) {
             def param = parameters[i].split(':')
