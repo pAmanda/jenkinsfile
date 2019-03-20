@@ -8,7 +8,6 @@ def call(body) {
     def tagName = ''
     def branchName = ''
 
-
     if(!env?.trim()) {
         environment = 'default'
 
